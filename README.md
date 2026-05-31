@@ -108,11 +108,17 @@ software runs, not where it is convenient.
 
 See [MODELS.md](MODELS.md) for each model, where it comes from, and its license.
 
+## Samples
+
+- [`sample-android/`](sample-android) is a minimal Compose app: pick a file, transcribe
+  on-device, see the text and timing. Build it with `./gradlew :sample-android:assembleDebug`.
+- [`ios-sample/`](ios-sample) is the SwiftUI equivalent, wired with XcodeGen and
+  WhisperKit. See its [README](ios-sample/README.md) to build and run.
+
 ## Status
 
 Transcription is real and working on both platforms today. Audio extraction, the
-Whisper runtimes, and model download all run on-device. Sample apps for each platform
-live alongside this library.
+Whisper runtimes, and model download all run on-device.
 
 ## License
 

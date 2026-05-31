@@ -1,0 +1,96 @@
+import SwiftUI
+import UniformTypeIdentifiers
+import Earshot
+
+/// Smallest honest demo of the Earshot SDK on iOS: pick an audio or video file,
+/// transcribe it entirely on-device through WhisperKit, show the text and timing.
+@main
+struct EarshotSampleApp: App {
+    init() {
+        // Register the Swift WhisperKit backend with the shared seam, once, at launch.
+        NativeTranscriptionProviderHolder.shared.implementation = WhisperKitTranscriptionProvider()
+    }
+
+    var body: some Scene {
+        WindowGroup { ContentView() }
+    }
+}
+
+struct ContentView: View {
+    @State private var status = "Pick an audio or video file to transcribe on-device."
+    @State private var transcript = ""
+    @State private var busy = false
+    @State private var picking = false
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                Text("Earshot").font(.largeTitle.bold())
+                Text("On-device speech to text. Whisper via WhisperKit / CoreML. Nothing leaves the phone.")
+                    .font(.subheadline).foregroundStyle(.secondary)
+
+                Button(busy ? "Working..." : "Pick audio / video") { picking = true }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(busy)
+
+                if busy { ProgressView().frame(maxWidth: .infinity) }
+
+                Text(status).font(.footnote).foregroundStyle(.secondary)
+
+                if !transcript.isEmpty {
+                    Divider()
+                    Text(transcript).font(.body)
+                }
+            }
+            .padding(24)
+        }
+        .fileImporter(isPresented: $picking,
+                      allowedContentTypes: [.audio, .movie, .mpeg4Movie, .wav],
+                      allowsMultipleSelection: false) { result in
+            switch result {
+            case .success(let urls):
+                if let url = urls.first { transcribe(url) }
+            case .failure(let error):
+                status = "Pick failed: \(error.localizedDescription)"
+            }
+        }
+    }
+
+    private func transcribe(_ url: URL) {
+        busy = true
+        transcript = ""
+        Task {
+            defer { busy = false }
+            do {
+                // Copy the security-scoped pick into a path Earshot can read.
+                let needsStop = url.startAccessingSecurityScopedResource()
+                defer { if needsStop { url.stopAccessingSecurityScopedResource() } }
+                let local = FileManager.default.temporaryDirectory
+                    .appendingPathComponent("input_" + url.lastPathComponent)
+                try? FileManager.default.removeItem(at: local)
+                try FileManager.default.copyItem(at: url, to: local)
+
+                let transcriber = OnDeviceTranscriber(engine: TranscriptionEngine(),
+                                                      audioExtractor: AudioExtractor())
+                status = "Loading model (first run downloads it)..."
+                _ = try await transcriber.prepare(config: TranscriptionConfig())
+
+                status = "Transcribing on-device..."
+                let scratch = FileManager.default.temporaryDirectory
+                    .appendingPathComponent("scratch.wav").path
+                let result = try await transcriber.transcribeMedia(mediaPath: local.path,
+                                                                   scratchWavPath: scratch)
+                transcriber.release()
+
+                if let ok = result as? TranscriptionEngineResultSuccess {
+                    transcript = ok.text
+                    status = "Done on-device in \(ok.processingTimeMs) ms"
+                } else if let err = result as? TranscriptionEngineResultError {
+                    status = "Error: \(err.message)"
+                }
+            } catch {
+                status = "Error: \(error.localizedDescription)"
+            }
+        }
+    }
+}

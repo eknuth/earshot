@@ -4,6 +4,11 @@ plugins {
 }
 
 kotlin {
+    // The transcription seam uses expect/actual classes (still flagged Beta by the compiler).
+    compilerOptions {
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
+
     androidTarget {
         compilations.all {
             kotlinOptions {

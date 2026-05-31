@@ -1,0 +1,62 @@
+name: EarshotSample
+options:
+  bundleIdPrefix: dev.knuth.earshot
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+
+# On-device ASR runtime. WhisperKit (CoreML) is wired in through
+# WhisperKitTranscriptionProvider, which registers itself with the shared
+# NativeTranscriptionProviderHolder at launch.
+packages:
+  WhisperKit:
+    url: https://github.com/argmaxinc/WhisperKit
+    from: "0.9.0"
+
+settings:
+  base:
+    # The KMP embed task writes Earshot.framework here, keyed by configuration + sdk.
+    FRAMEWORK_SEARCH_PATHS:
+      - $(SRCROOT)/../earshot/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)
+    # Earshot is a static framework; nothing to embed or sign, just link.
+    ENABLE_USER_SCRIPT_SANDBOXING: NO
+
+targets:
+  EarshotSample:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: Sources
+      # The reference WhisperKit glue lives at the repo root and is shared with the docs.
+      - path: ../ios-support
+    info:
+      path: Sources/Info.plist
+      properties:
+        CFBundleDisplayName: Earshot
+        CFBundleShortVersionString: "1.0"
+        CFBundleVersion: "1"
+        # On-device models + standard HTTPS only, so the app qualifies for the
+        # encryption exemption.
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.knuth.earshot.sample
+        CODE_SIGN_STYLE: Automatic
+        ENABLE_PREVIEWS: YES
+        SWIFT_VERSION: "5.0"
+    dependencies:
+      # Link the KMP framework produced by the pre-build run script below.
+      - framework: Earshot.framework
+        embed: false
+        link: true
+        implicit: true
+      - package: WhisperKit
+        product: WhisperKit
+    preBuildScripts:
+      - name: "Build + embed the Earshot KMP framework"
+        basedOnDependencyAnalysis: false
+        script: |
+          cd "$SRCROOT/.." && \
+          ./gradlew :earshot:embedAndSignAppleFrameworkForXcode

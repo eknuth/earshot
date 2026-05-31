@@ -23,5 +23,4 @@ dependencyResolutionManagement {
 rootProject.name = "Earshot"
 
 include(":earshot")
-// Sample apps are added in a later step:
-// include(":sample-android")
+include(":sample-android")
