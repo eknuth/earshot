@@ -1,0 +1,29 @@
+# Gradle / Kotlin
+.gradle/
+.kotlin/
+build/
+**/build/
+local.properties
+
+# Downloaded model artifacts (fetched on-device at runtime, never committed)
+*.onnx
+*.mlmodelc/
+*.task
+
+# Android
+*.apk
+*.aab
+
+# Xcode / iOS
+xcuserdata/
+*.xcuserstate
+DerivedData/
+.swiftpm/
+**/*.xcodeproj/project.xcworkspace/xcuserdata/
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+*.iml
