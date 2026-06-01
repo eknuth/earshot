@@ -155,20 +155,16 @@ gh release create v0.1.0 Earshot.xcframework.zip --generate-notes
 
 ---
 
-## Subsequent releases (CI)
+## Subsequent releases
 
-After the one-time setup, the `Release` workflow (`.github/workflows/release.yml`) automates this.
-Add these **GitHub Actions secrets** (repo → Settings → Secrets and variables → Actions):
+Every release is cut by hand with the same five steps above, just with the new version number.
+This is deliberate: Maven Central is irreversible, and the XCFramework zip on the GitHub release
+must be the exact bytes whose checksum is pinned in `Package.swift` (a CI rebuild can differ
+byte-for-byte and break SPM validation), so the locally built zip is always the source of truth.
 
-| Secret | Value |
-| --- | --- |
-| `MAVEN_CENTRAL_USERNAME` | Portal token username |
-| `MAVEN_CENTRAL_PASSWORD` | Portal token password |
-| `SIGNING_KEY` | full contents of `earshot-signing-key.asc` |
-| `SIGNING_KEY_PASSWORD` | leave empty (key has no passphrase); create it blank or omit it |
-
-Then, per release: bump the version, update `Package.swift` (new `url` + checksum for the new
-XCFramework), commit, and push a `vX.Y.Z` tag. CI builds both artifacts, **fails loudly if
-`Package.swift`'s checksum/url don't match the freshly built XCFramework**, publishes the staged
-Maven deployment, and creates the GitHub release with the AAR + XCFramework attached. You still
-click **Publish** on the staged deployment in the Portal.
+The `Release` workflow (`.github/workflows/release.yml`) is a **manual** `workflow_dispatch`
+convenience: trigger it from the Actions tab with a version input to rebuild the AAR + XCFramework
+and (re)create the GitHub release. It does **not** publish to Maven Central and its verify step
+fails loudly if a rebuild's checksum drifts from `Package.swift`. Maven Central publishing is
+always the manual `source .env && ./gradlew :earshot:publishToMavenCentral` step, followed by the
+**Publish** click in the Portal.

@@ -1,9 +1,15 @@
 name: Release
 
+# Manual only. Releases are cut by hand per PUBLISHING.md so the XCFramework zip that lands on
+# the GitHub release is the exact one whose checksum is pinned in Package.swift (a CI rebuild can
+# differ byte-for-byte and break SPM validation). Trigger this from the Actions tab with the
+# version input to rebuild + re-attach artifacts; it does not publish to Maven Central.
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to build (without the leading v), e.g. 0.1.0"
+        required: true
 
 permissions:
   contents: write
@@ -28,8 +34,8 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Derive version from tag
-        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"
+      - name: Resolve version from input
+        run: echo "VERSION=${{ inputs.version }}" >> "$GITHUB_ENV"
 
       - name: Build release AAR
         run: ./gradlew :earshot:assembleRelease -Pearshot.version="$VERSION" --stacktrace
@@ -49,23 +55,15 @@ jobs:
       - name: Verify Package.swift matches the built XCFramework
         run: |
           if ! grep -q "$CHECKSUM" Package.swift; then
-            echo "::error::Package.swift checksum does not match the XCFramework built for $GITHUB_REF_NAME."
+            echo "::error::Package.swift checksum does not match the XCFramework built for v$VERSION."
             echo "Built checksum: $CHECKSUM"
-            echo "Update Package.swift (set the v$VERSION url and this checksum), commit, delete the tag, and re-tag the commit. See PUBLISHING.md."
+            echo "A CI rebuild can differ from the local build; the release must carry the locally pinned zip. See PUBLISHING.md."
             exit 1
           fi
           if ! grep -q "releases/download/v$VERSION/Earshot.xcframework.zip" Package.swift; then
             echo "::error::Package.swift binaryTarget url does not point at v$VERSION."
             exit 1
           fi
-
-      - name: Publish to Maven Central (staged; release approved in the Portal)
-        env:
-          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
-          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
-          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
-        run: ./gradlew :earshot:publishToMavenCentral -Pearshot.version="$VERSION" --no-configuration-cache --stacktrace
 
       - name: Collect release artifacts
         run: |
@@ -76,5 +74,6 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: "v${{ inputs.version }}"
           generate_release_notes: true
           files: release-artifacts/*
