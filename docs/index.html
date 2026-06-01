@@ -50,6 +50,7 @@
       <a href="#quickstart">Quickstart</a>
       <a href="#api">API</a>
       <a href="#measure">Measuring</a>
+      <a href="benchmarks.html">Benchmarks</a>
       <a href="#models">Models</a>
       <a class="nav-cta" href="https://github.com/eknuth/earshot" target="_blank" rel="noopener">
         <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
@@ -362,27 +363,22 @@ let result = try await transcriber.transcribeAudio(wavPath: wavPath)</code></pre
     <div class="measure-grid">
       <div class="wer-chart reveal" aria-hidden="false">
         <h3>Word error rate</h3>
-        <p class="axis-note">Lower is better · standard WER benchmark</p>
+        <p class="axis-note">Lower is better · same clips, same yardstick</p>
 
         <div class="bar-row">
-          <span class="label"><b>Whisper, one size up</b></span>
-          <span class="num">9.57%</span>
-          <div class="bar-track"><div class="bar-fill bigger" data-fill="9.57" style="transform:scaleX(0)"></div></div>
+          <span class="label"><b>iOS</b> · WhisperKit on the Neural Engine</span>
+          <span class="num">8.38%</span>
+          <div class="bar-track"><div class="bar-fill bigger" data-fill="8.38" style="transform:scaleX(0)"></div></div>
         </div>
         <div class="bar-row">
-          <span class="label"><b>Whisper, smaller checkpoint</b></span>
-          <span class="num">12.16%</span>
-          <div class="bar-track"><div class="bar-fill small" data-fill="12.16" style="transform:scaleX(0)"></div></div>
-        </div>
-        <div class="bar-row">
-          <span class="label">Apple built-in on-device recognizer</span>
-          <span class="num">higher</span>
-          <div class="bar-track"><div class="bar-fill apple" data-fill="17" style="transform:scaleX(0)"></div></div>
+          <span class="label"><b>Android</b> · ONNX Runtime on a Pixel 9a</span>
+          <span class="num">8.98%</span>
+          <div class="bar-track"><div class="bar-fill small" data-fill="8.98" style="transform:scaleX(0)"></div></div>
         </div>
 
         <p class="chart-foot">
-          Both Whisper checkpoints come out ahead of Apple's built-in on-device recognizer on
-          the same benchmark. Bars are scaled relative to the highest value shown.
+          Whisper tiny.en on both, scored on 25 LibriSpeech clips on real hardware.
+          <a href="benchmarks.html">See the full benchmarks</a>.
         </p>
       </div>
 
@@ -390,20 +386,21 @@ let result = try await transcriber.transcribeAudio(wavPath: wavPath)</code></pre
         <p class="kicker">Measuring it</p>
         <h2>The point of on-device is that you can prove it where it runs.</h2>
         <p class="sub">
-          On a standard word-error-rate benchmark the smaller Whisper checkpoint lands around
-          12.16% word error, and the next size up around 9.57%, at almost no latency cost.
+          Whisper tiny.en lands at 8.38% word error on an iPad's Neural Engine and 8.98% on a
+          Pixel 9a, scored on the same clips by one yardstick. The two differ because of the runtime
+          and its precision, float16 on CoreML versus int8 on ONNX, not the model.
         </p>
 
         <div class="relcut">
-          <span class="big">21%</span>
-          <span class="cap">relative cut in word error for one step up in model size.</span>
+          <span class="big">0.02×</span>
+          <span class="cap">real-time factor on the iPad: about a minute of speech transcribed in a second, on the device's own silicon.</span>
         </div>
 
         <div class="caveat">
-          <strong>One caveat worth stating:</strong> the checkpoint you benchmark in a lab and the
-          quantized build that actually runs on the phone are not identical. So the number that
-          counts is the one you get from scoring the on-device model on a real device. Measure
-          where the software runs, not where it is convenient.
+          <strong>These are real-device numbers, not lab estimates.</strong> Each platform ran its
+          own on-device runtime on an actual iPad and Pixel, and every speed and memory figure says
+          where it was measured. The method, the per-clip scores, and the full table are on the
+          <a href="benchmarks.html">benchmarks page</a>.
         </div>
       </div>
     </div>
@@ -525,6 +522,7 @@ let result = try await transcriber.transcribeAudio(wavPath: wavPath)</code></pre
         <a href="#quickstart">Quickstart</a>
         <a href="#api">API</a>
         <a href="#measure">Measuring</a>
+        <a href="benchmarks.html">Benchmarks</a>
         <a href="#models">Models</a>
         <a href="https://github.com/eknuth/earshot" target="_blank" rel="noopener">GitHub</a>
       </nav>

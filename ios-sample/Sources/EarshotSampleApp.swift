@@ -7,6 +7,12 @@ import Earshot
 @main
 struct EarshotSampleApp: App {
     init() {
+        // Benchmark mode: transcribe the bundled fixtures, write raw-ios.json, exit. Used by the
+        // on-device benchmark harness (--earshot-bench), not part of the normal demo.
+        if CommandLine.arguments.contains("--earshot-bench") {
+            Task { await BenchRunner.run() }
+            return
+        }
         // Register the Swift WhisperKit backend with the shared seam, once, at launch.
         NativeTranscriptionProviderHolder.shared.implementation = WhisperKitTranscriptionProvider()
     }

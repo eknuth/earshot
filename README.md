@@ -132,15 +132,17 @@ let result = try await transcriber.transcribeAudio(wavPath: wavPath)
 ## Measuring it
 
 The point of on-device is that you can prove it works where it runs, so this library
-exists to be measured. On a standard word-error-rate benchmark the smaller Whisper
-checkpoint lands around 12.16% word error and the next size up around 9.57%, a 21%
-relative cut, at almost no latency cost. On the same benchmark it comes out ahead of
-Apple's built-in on-device recognizer.
+exists to be measured, and the numbers come from real hardware. Scored on 25 LibriSpeech
+clips, Whisper tiny.en lands at 8.38% word error on an iPad's Neural Engine (WhisperKit /
+CoreML) and 8.98% on a Pixel 9a (ONNX Runtime). On the iPad it transcribes at about 0.02x
+real time, roughly a minute of speech a second. The two runtimes differ on accuracy
+because of precision, float16 on CoreML versus int8 on ONNX, not the model.
 
-One caveat worth stating: the checkpoint you benchmark in a lab and the quantized
-build that actually runs on the phone are not identical, so the number that counts is
-the one you get from scoring the on-device model on a real device. Measure where the
-software runs, not where it is convenient.
+Word error rate is scored offline by one algorithm over identical references, so the
+runtimes are comparable by construction. The harness, per-clip results, speed and memory
+are in [`benchmark/`](benchmark) and rendered at
+[the benchmarks page](https://eknuth.github.io/earshot/benchmarks.html); see
+[`benchmark/README.md`](benchmark/README.md) to reproduce on your own device.
 
 ## Models and licenses
 

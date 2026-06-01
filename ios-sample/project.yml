@@ -30,6 +30,10 @@ targets:
       - path: Sources
       # The reference WhisperKit glue lives at the repo root and is shared with the docs.
       - path: ../ios-support
+      # Benchmark fixtures (LibriSpeech clips + manifest). Folder reference so the
+      # fixtures/ structure is preserved in the app bundle. Used only by --earshot-bench.
+      - path: fixtures
+        type: folder
     info:
       path: Sources/Info.plist
       properties:

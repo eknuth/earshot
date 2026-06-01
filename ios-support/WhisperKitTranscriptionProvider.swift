@@ -34,7 +34,14 @@ final class WhisperKitTranscriptionProvider: NSObject, NativeTranscriptionProvid
     /// any-thread `isReady()` bridge never has to touch main-actor state.
     private let readyFlag = ReadyFlag()
 
-    override init() { super.init() }
+    /// Optional WhisperKit model name (e.g. "tiny.en"). `nil` lets WhisperKit pick its
+    /// device-appropriate default. The benchmark pins this so it matches the Android model.
+    private let modelName: String?
+
+    init(modelName: String? = nil) {
+        self.modelName = modelName
+        super.init()
+    }
 
     // MARK: NativeTranscriptionProvider
 
@@ -64,7 +71,8 @@ final class WhisperKitTranscriptionProvider: NSObject, NativeTranscriptionProvid
     private func loadedPipe() async throws -> WhisperKit {
         if let pipe { return pipe }
         if let loadTask { return try await loadTask.value }
-        let task = Task { try await WhisperKit() }
+        let pinned = modelName
+        let task = Task { try await WhisperKit(model: pinned) }
         loadTask = task
         do {
             let created = try await task.value

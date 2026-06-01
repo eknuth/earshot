@@ -1,0 +1,137 @@
+{
+  "runtime": "ONNX Runtime",
+  "platform": "Android",
+  "model": "whisper-tiny.en (Olive int8)",
+  "device": "Pixel 9a",
+  "provenance": "real-device",
+  "osVersion": "Android 16 (API 36)",
+  "loadMs": 462,
+  "peakMemoryBytes": 385304576,
+  "clips": [
+    {
+      "id": "1272-128104-0000",
+      "hypothesis": "Mr. Quilter is the apostle of the middle classes, and we are glad to welcome his gospel.",
+      "processingMs": 1029
+    },
+    {
+      "id": "1272-128104-0001",
+      "hypothesis": "Nor is Mr. Colter's manner less interesting than his matter.",
+      "processingMs": 951
+    },
+    {
+      "id": "1272-128104-0002",
+      "hypothesis": "He tells us that at this festive season of the year, with Christmas and roast beef looming before us, similes drawn from eating and its results occur most readily to the mind.",
+      "processingMs": 955
+    },
+    {
+      "id": "1272-128104-0003",
+      "hypothesis": "He has grave doubts whether Sir Frederick Layton's work is really Greek after all, and can discover in it but little of Rocky Ithaca.",
+      "processingMs": 906
+    },
+    {
+      "id": "1272-128104-0004",
+      "hypothesis": "Linnell's pictures are a sort of upguards and Adam paintings, and Mason's exquisite Idols are as national as a jingo poem. Mr. Birk at Foster's landscapes smile at one much in the same way that Mr. Carker used to flash his teeth. And Mr. John Collier gives his sitter a cheerful slap in the back, before he says like a shampooer and a Turkish bath. \"Next man!\"",
+      "processingMs": 1144
+    },
+    {
+      "id": "1272-128104-0005",
+      "hypothesis": "It is obviously unnecessary for us to point out how luminous these criticisms are, how delicate and expression.",
+      "processingMs": 903
+    },
+    {
+      "id": "1272-128104-0006",
+      "hypothesis": "On the general principles of art, Mr. Krilter writes with equal lucidity.",
+      "processingMs": 841
+    },
+    {
+      "id": "1272-128104-0007",
+      "hypothesis": "Painting, he tells us, is of a different quality to mathematics, and finish in art is adding more factor.",
+      "processingMs": 890
+    },
+    {
+      "id": "1272-128104-0008",
+      "hypothesis": "as for etchings, there are two kinds, British and foreign.",
+      "processingMs": 867
+    },
+    {
+      "id": "1272-128104-0009",
+      "hypothesis": "He limits most bitterly the divorce that has been made between decorative art and what we usually call pictures. Makes a customary appeal to the last judgment and reminds us that in the great days of art Michelangelo was the furnishing a poster.",
+      "processingMs": 1015
+    },
+    {
+      "id": "1272-128104-0010",
+      "hypothesis": "near the fire, and the ornaments Fred brought home from India on the mental board.",
+      "processingMs": 892
+    },
+    {
+      "id": "1272-128104-0011",
+      "hypothesis": "In fact, he is quite severe on Mr. Ruskin for not recognizing that a picture should denote the frailty of man, and remarks with pleasing courtesy and felicitous grace that many faces are feeling",
+      "processingMs": 991
+    },
+    {
+      "id": "1272-128104-0012",
+      "hypothesis": "Only, unfortunately, his own work never does get good.",
+      "processingMs": 862
+    },
+    {
+      "id": "1272-128104-0013",
+      "hypothesis": "Mr. Quilter has missed his chance, for he has failed even to make himself the Tipper of Painting.",
+      "processingMs": 911
+    },
+    {
+      "id": "1272-128104-0014",
+      "hypothesis": "by Harry Quilter M.A.",
+      "processingMs": 850
+    },
+    {
+      "id": "1272-135031-0000",
+      "hypothesis": "Because you were sleeping instead of conquering, the lovely rose princess has become a fiddle without a bow, while poor Asaghe sits there, a cooing dove.",
+      "processingMs": 937
+    },
+    {
+      "id": "1272-135031-0001",
+      "hypothesis": "He has gone, and gone for good. Antered polychrome, who had managed to squeeze into the room beside the dragon, and had witnessed the occurrences with much interest.",
+      "processingMs": 933
+    },
+    {
+      "id": "1272-135031-0002",
+      "hypothesis": "I have remained a prisoner only because I wished to be one. And with this, he stepped forward and burst the stout chains as easily as if they had been threads.",
+      "processingMs": 946
+    },
+    {
+      "id": "1272-135031-0003",
+      "hypothesis": "The little girl had been asleep, but she heard the wraps and opened the door.",
+      "processingMs": 899
+    },
+    {
+      "id": "1272-135031-0004",
+      "hypothesis": "The king is flood and disgrace, and your friends are asking for you.",
+      "processingMs": 863
+    },
+    {
+      "id": "1272-135031-0005",
+      "hypothesis": "I begged Ruggida a long ago to send him away, but he would not do so.",
+      "processingMs": 914
+    },
+    {
+      "id": "1272-135031-0006",
+      "hypothesis": "I also offered to help your brother to escape, but he would not go.",
+      "processingMs": 913
+    },
+    {
+      "id": "1272-135031-0007",
+      "hypothesis": "He eats and sleeps very steadily, replied the new king.",
+      "processingMs": 884
+    },
+    {
+      "id": "1272-135031-0008",
+      "hypothesis": "I hope it doesn't work too hard since Shaggy.",
+      "processingMs": 856
+    },
+    {
+      "id": "1272-135031-0009",
+      "hypothesis": "He doesn't work at all.",
+      "processingMs": 870
+    }
+  ]
+}

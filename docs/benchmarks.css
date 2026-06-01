@@ -1,0 +1,230 @@
+/* Earshot benchmarks page. Additive to styles.css: reuses the signal-room tokens
+   (--ink-*, --amber, --cyan/--secure, --violet, fonts, spacing). Android reads cyan,
+   iOS reads violet, matching the platform table on the landing page. Zero build step. */
+
+.bench-hero { padding-bottom: var(--s-4); }
+.bench-hero h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2rem, 4.6vw, 3.4rem);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  margin: var(--s-2) 0 var(--s-3);
+  max-width: 18ch;
+}
+.bench-lede {
+  color: var(--fg-dim);
+  font-size: clamp(1rem, 1.4vw, 1.18rem);
+  max-width: 64ch;
+}
+.bench-lede code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  color: var(--amber);
+  background: hsl(36 90% 60% / 0.08);
+  padding: 0.08em 0.4em;
+  border-radius: 6px;
+}
+.t-android { color: var(--secure); }
+.t-ios { color: var(--violet); }
+
+.bench-body { padding-top: 0; }
+.bench-loading { color: var(--fg-faint); font-family: var(--font-mono); }
+
+/* ---------- Headline accuracy delta ---------- */
+.delta-card {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(120% 140% at 12% 0%, hsl(176 60% 40% / 0.06), transparent 55%),
+    radial-gradient(120% 140% at 88% 0%, hsl(258 70% 60% / 0.07), transparent 55%),
+    var(--ink-850);
+  padding: clamp(var(--s-4), 4vw, var(--s-6));
+  box-shadow: var(--shadow-md);
+}
+.delta-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  margin: 0 0 var(--s-4);
+}
+.delta-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: clamp(var(--s-3), 3vw, var(--s-6));
+  align-items: center;
+}
+.delta-side { text-align: center; }
+.delta-side .who {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  color: var(--fg-dim);
+  margin-bottom: var(--s-1);
+}
+.delta-side .who b { color: var(--fg); }
+.delta-side.android .who b { color: var(--secure); }
+.delta-side.ios .who b { color: var(--violet); }
+.delta-num {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.6rem, 8vw, 5rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+.delta-side.android .delta-num { color: var(--secure); }
+.delta-side.ios .delta-num { color: var(--violet); }
+.delta-num small { font-size: 0.4em; color: var(--fg-faint); font-family: var(--font-mono); font-weight: 400; }
+.delta-side .sub { color: var(--fg-faint); font-size: 0.84rem; margin-top: var(--s-1); }
+.delta-mid {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 0 var(--s-2);
+}
+.delta-mid .gap {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  color: var(--amber);
+  font-weight: 600;
+}
+.delta-mid .gap-cap {
+  font-size: 0.72rem; color: var(--fg-faint); text-align: center; max-width: 12ch; line-height: 1.3;
+}
+.delta-foot {
+  margin: var(--s-4) 0 0;
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--line-soft);
+  color: var(--fg-dim);
+  font-size: 0.92rem;
+}
+.delta-foot b { color: var(--fg); }
+
+/* ---------- Section blocks ---------- */
+.bench-block { margin-top: clamp(var(--s-6), 7vw, var(--s-8)); }
+.bench-block > h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  letter-spacing: -0.015em;
+  margin: 0 0 var(--s-2);
+}
+.bench-block > .block-sub { color: var(--fg-dim); max-width: 62ch; margin: 0 0 var(--s-4); }
+
+/* ---------- Comparison table ---------- */
+.rt-table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--ink-850); }
+table.rt-table { width: 100%; border-collapse: collapse; min-width: 640px; }
+table.rt-table th, table.rt-table td {
+  padding: var(--s-3) var(--s-3);
+  text-align: left;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: 0.95rem;
+}
+table.rt-table thead th {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  font-weight: 500;
+  white-space: nowrap;
+}
+table.rt-table tbody th { font-weight: 600; color: var(--fg); white-space: nowrap; }
+table.rt-table tbody th .rt-plat { display: block; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.06em; margin-top: 2px; }
+table.rt-table tr.row-android tbody th .rt-plat, table.rt-table td.plat-android { color: var(--secure); }
+table.rt-table td { color: var(--fg-dim); font-variant-numeric: tabular-nums; }
+table.rt-table td .big { color: var(--fg); font-weight: 600; font-size: 1.05rem; }
+table.rt-table tbody tr:last-child th, table.rt-table tbody tr:last-child td { border-bottom: none; }
+table.rt-table tbody tr:hover td, table.rt-table tbody tr:hover th { background: hsl(210 30% 94% / 0.018); }
+
+/* ---------- Provenance badge ---------- */
+.prov {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.04em;
+  padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line);
+  white-space: nowrap;
+}
+.prov .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.prov.real { color: hsl(150 60% 62%); border-color: hsl(150 50% 40% / 0.5); background: hsl(150 50% 40% / 0.08); }
+.prov.simulator { color: var(--violet); border-color: hsl(258 60% 60% / 0.4); background: hsl(258 60% 60% / 0.07); }
+.prov.emulator { color: var(--secure); border-color: hsl(176 50% 45% / 0.4); background: hsl(176 50% 45% / 0.07); }
+.prov.pending { color: var(--fg-faint); border-style: dashed; }
+
+/* ---------- Charts (CSS bars) ---------- */
+.chart-card {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--ink-850); padding: clamp(var(--s-3), 3vw, var(--s-5));
+}
+.chart-card + .chart-card { margin-top: var(--s-4); }
+.chart-head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s-3); flex-wrap: wrap; margin-bottom: var(--s-4); }
+.chart-head h3 { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: 1.2rem; }
+.chart-head .hint { font-family: var(--font-mono); font-size: 0.74rem; color: var(--fg-faint); }
+.bar-item { margin: var(--s-3) 0 var(--s-4); }
+.bar-item .blabel { font-size: 0.92rem; color: var(--fg-dim); margin-bottom: 8px; }
+.bar-item .blabel b { color: var(--fg); }
+.bar-line { display: grid; grid-template-columns: 1fr max-content; align-items: center; gap: var(--s-3); }
+.bar-track { position: relative; height: 16px; border-radius: 999px; background: hsl(220 18% 22% / 0.55); overflow: hidden; }
+.bar-fill {
+  position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 999px;
+  transform-origin: left center; transform: scaleX(0);
+  transition: transform 0.9s var(--ease-out);
+}
+.bar-fill.android { background: linear-gradient(90deg, var(--cyan-deep), var(--cyan)); }
+.bar-fill.ios { background: linear-gradient(90deg, hsl(258 60% 56%), var(--violet)); }
+/* Non-real-device speed/memory bars are hatched + dimmed: real, but not representative. */
+.bar-fill.unrep {
+  opacity: 0.6;
+  background-image: repeating-linear-gradient(45deg, hsl(0 0% 100% / 0.16) 0 6px, transparent 6px 12px);
+  background-blend-mode: overlay;
+}
+.bar-line .bval { font-family: var(--font-mono); font-size: 0.9rem; color: var(--fg); font-variant-numeric: tabular-nums; min-width: 5ch; text-align: right; }
+.chart-foot { margin: var(--s-3) 0 0; font-size: 0.84rem; color: var(--fg-faint); }
+.unrep-flag {
+  display: inline-flex; align-items: center; gap: 6px; margin-top: var(--s-3);
+  padding: var(--s-2) var(--s-3); border-radius: var(--radius-sm);
+  border: 1px solid hsl(36 80% 55% / 0.3); background: hsl(36 80% 55% / 0.06);
+  color: var(--fg-dim); font-size: 0.86rem;
+}
+.unrep-flag b { color: var(--amber); }
+
+/* ---------- Per-clip table ---------- */
+details.clips { margin-top: var(--s-3); border: 1px solid var(--line); border-radius: var(--radius); background: var(--ink-850); overflow: hidden; }
+details.clips > summary {
+  cursor: pointer; padding: var(--s-3) var(--s-4); list-style: none;
+  font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.04em; color: var(--fg-dim);
+  display: flex; justify-content: space-between; align-items: center;
+}
+details.clips > summary::-webkit-details-marker { display: none; }
+details.clips > summary:hover { color: var(--fg); }
+details.clips[open] > summary { border-bottom: 1px solid var(--line-soft); }
+.clip-scroll { overflow-x: auto; }
+table.clip-table { width: 100%; border-collapse: collapse; min-width: 560px; }
+table.clip-table th, table.clip-table td { padding: 10px var(--s-3); text-align: right; font-size: 0.86rem; border-bottom: 1px solid var(--line-soft); font-variant-numeric: tabular-nums; }
+table.clip-table th:first-child, table.clip-table td:first-child { text-align: left; font-family: var(--font-mono); font-size: 0.78rem; color: var(--fg-faint); }
+table.clip-table thead th { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-faint); font-weight: 500; }
+table.clip-table td.android { color: var(--secure); }
+table.clip-table td.ios { color: var(--violet); }
+table.clip-table tbody tr:last-child td { border-bottom: none; }
+
+/* ---------- Methodology + legend ---------- */
+.method-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--s-3); }
+.method-card { border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--ink-850); padding: var(--s-3) var(--s-4); }
+.method-card .mk { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--fg-faint); margin: 0 0 6px; }
+.method-card .mv { color: var(--fg); font-size: 0.98rem; }
+.method-card .mv b { color: var(--amber); }
+.repro {
+  margin-top: var(--s-4); border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--ink-900); padding: var(--s-3) var(--s-4); overflow-x: auto;
+}
+.repro .rk { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--fg-faint); margin: 0 0 var(--s-2); }
+.repro pre { margin: 0; }
+.repro code { font-family: var(--font-mono); font-size: 0.82rem; color: var(--cyan); line-height: 1.7; white-space: pre; }
+.legend { display: flex; flex-wrap: wrap; gap: var(--s-3); margin-top: var(--s-3); }
+.legend .li { display: flex; gap: 10px; align-items: flex-start; font-size: 0.86rem; color: var(--fg-dim); max-width: 30ch; }
+
+@media (max-width: 720px) {
+  .delta-grid { grid-template-columns: 1fr; }
+  .delta-mid { flex-direction: row; gap: var(--s-2); }
+  .bar-line { grid-template-columns: 1fr max-content; }
+}

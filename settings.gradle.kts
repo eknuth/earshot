@@ -24,3 +24,4 @@ rootProject.name = "Earshot"
 
 include(":earshot")
 include(":sample-android")
+include(":benchmark")
