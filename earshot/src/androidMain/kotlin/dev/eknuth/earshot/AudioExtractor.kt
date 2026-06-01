@@ -1,4 +1,4 @@
-package dev.knuth.earshot
+package dev.eknuth.earshot
 
 import android.media.MediaCodec
 import android.media.MediaExtractor

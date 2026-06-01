@@ -30,3 +30,12 @@ DerivedData/
 # IDE
 .idea/
 *.iml
+
+# Signing / publishing secrets (NEVER commit)
+*.asc
+*.gpg
+secring.gpg
+.env
+
+# Release build artifacts (attached to GitHub releases, not committed)
+*.xcframework.zip

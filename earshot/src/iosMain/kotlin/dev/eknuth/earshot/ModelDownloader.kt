@@ -1,4 +1,4 @@
-package dev.knuth.earshot
+package dev.eknuth.earshot
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow

@@ -1,0 +1,80 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build and publish release
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Derive version from tag
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"
+
+      - name: Build release AAR
+        run: ./gradlew :earshot:assembleRelease -Pearshot.version="$VERSION" --stacktrace
+
+      - name: Build iOS XCFramework
+        run: ./gradlew :earshot:assembleEarshotReleaseXCFramework -Pearshot.version="$VERSION" --stacktrace
+
+      - name: Package + checksum XCFramework
+        run: |
+          ditto -c -k --sequesterRsrc --keepParent \
+            earshot/build/XCFrameworks/release/Earshot.xcframework \
+            Earshot.xcframework.zip
+          # compute-checksum needs to run inside the Swift package (repo root has Package.swift).
+          CHECKSUM=$(swift package compute-checksum Earshot.xcframework.zip)
+          echo "CHECKSUM=$CHECKSUM" >> "$GITHUB_ENV"
+
+      - name: Verify Package.swift matches the built XCFramework
+        run: |
+          if ! grep -q "$CHECKSUM" Package.swift; then
+            echo "::error::Package.swift checksum does not match the XCFramework built for $GITHUB_REF_NAME."
+            echo "Built checksum: $CHECKSUM"
+            echo "Update Package.swift (set the v$VERSION url and this checksum), commit, delete the tag, and re-tag the commit. See PUBLISHING.md."
+            exit 1
+          fi
+          if ! grep -q "releases/download/v$VERSION/Earshot.xcframework.zip" Package.swift; then
+            echo "::error::Package.swift binaryTarget url does not point at v$VERSION."
+            exit 1
+          fi
+
+      - name: Publish to Maven Central (staged; release approved in the Portal)
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
+        run: ./gradlew :earshot:publishToMavenCentral -Pearshot.version="$VERSION" --no-configuration-cache --stacktrace
+
+      - name: Collect release artifacts
+        run: |
+          mkdir -p release-artifacts
+          cp earshot/build/outputs/aar/*-release.aar release-artifacts/ || true
+          cp Earshot.xcframework.zip release-artifacts/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: release-artifacts/*

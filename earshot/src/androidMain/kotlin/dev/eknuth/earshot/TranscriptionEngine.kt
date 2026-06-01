@@ -1,4 +1,4 @@
-package dev.knuth.earshot
+package dev.eknuth.earshot
 
 import ai.onnxruntime.OnnxTensor
 import ai.onnxruntime.OrtEnvironment

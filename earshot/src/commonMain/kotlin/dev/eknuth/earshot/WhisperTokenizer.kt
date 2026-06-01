@@ -1,4 +1,4 @@
-package dev.knuth.earshot
+package dev.eknuth.earshot
 
 /**
  * Whisper special token IDs.

@@ -1,4 +1,4 @@
-package dev.knuth.earshot
+package dev.eknuth.earshot
 
 import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.ByteVar

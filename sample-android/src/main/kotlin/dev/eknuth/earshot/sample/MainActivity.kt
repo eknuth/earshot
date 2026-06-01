@@ -1,4 +1,4 @@
-package dev.knuth.earshot.sample
+package dev.eknuth.earshot.sample
 
 import android.content.Context
 import android.net.Uri
@@ -29,13 +29,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import dev.knuth.earshot.AudioExtractor
-import dev.knuth.earshot.ModelDownloadResult
-import dev.knuth.earshot.ModelDownloader
-import dev.knuth.earshot.OnDeviceTranscriber
-import dev.knuth.earshot.TranscriptionEngine
-import dev.knuth.earshot.TranscriptionEngineResult
-import dev.knuth.earshot.WhisperModels
+import dev.eknuth.earshot.AudioExtractor
+import dev.eknuth.earshot.ModelDownloadResult
+import dev.eknuth.earshot.ModelDownloader
+import dev.eknuth.earshot.OnDeviceTranscriber
+import dev.eknuth.earshot.TranscriptionEngine
+import dev.eknuth.earshot.TranscriptionEngineResult
+import dev.eknuth.earshot.WhisperModels
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

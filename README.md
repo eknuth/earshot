@@ -46,6 +46,36 @@ The cross-platform contract lives in `commonMain` as `expect` classes
 implementations. `OnDeviceTranscriber` is a thin facade that wires the extractor and
 engine together.
 
+## Install
+
+### Android (Maven Central)
+
+```kotlin
+// build.gradle.kts
+dependencies {
+    implementation("dev.eknuth:earshot:0.1.0")
+}
+```
+
+### iOS (Swift Package Manager)
+
+In Xcode: **File → Add Package Dependencies**, enter `https://github.com/eknuth/earshot`,
+and pick the latest version. Or add it to a `Package.swift`:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/eknuth/earshot", from: "0.1.0")
+]
+```
+
+This vends the shared `Earshot` framework, which is the cross-platform API. The iOS ASR
+runtime itself is WhisperKit, so also add
+[WhisperKit](https://github.com/argmaxinc/WhisperKit) and register a provider at launch,
+as shown under [iOS](#ios) below.
+
+Maintainers: the release process (Maven Central + the SPM XCFramework) is in
+[PUBLISHING.md](PUBLISHING.md).
+
 ## API
 
 ```kotlin

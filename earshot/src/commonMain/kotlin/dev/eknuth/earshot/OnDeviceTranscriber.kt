@@ -1,4 +1,4 @@
-package dev.knuth.earshot
+package dev.eknuth.earshot
 
 /**
  * One small API over the cross-platform transcription seam.

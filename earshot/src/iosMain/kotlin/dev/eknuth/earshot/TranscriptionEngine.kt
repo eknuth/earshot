@@ -1,6 +1,6 @@
-package dev.knuth.earshot
+package dev.eknuth.earshot
 
-import dev.knuth.earshot.currentTimeMillis
+import dev.eknuth.earshot.currentTimeMillis
 
 /**
  * Provider seam for native (Swift) transcription backends on iOS.

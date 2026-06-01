@@ -1,4 +1,4 @@
-package dev.knuth.earshot
+package dev.eknuth.earshot
 
 import android.util.Log
 import kotlinx.coroutines.Dispatchers

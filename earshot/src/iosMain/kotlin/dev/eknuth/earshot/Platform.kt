@@ -1,4 +1,4 @@
-package dev.knuth.earshot
+package dev.eknuth.earshot
 
 import platform.Foundation.NSDate
 import platform.Foundation.timeIntervalSince1970

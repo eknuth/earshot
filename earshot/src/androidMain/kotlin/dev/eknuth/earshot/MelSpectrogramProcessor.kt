@@ -1,4 +1,4 @@
-package dev.knuth.earshot
+package dev.eknuth.earshot
 
 import kotlin.math.PI
 import kotlin.math.cos

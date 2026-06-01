@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "dev.knuth.earshot.sample"
+    namespace = "dev.eknuth.earshot.sample"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "dev.knuth.earshot.sample"
+        applicationId = "dev.eknuth.earshot.sample"
         minSdk = 26
         targetSdk = 34
         versionCode = 1

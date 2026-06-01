@@ -1,6 +1,6 @@
 name: EarshotSample
 options:
-  bundleIdPrefix: dev.knuth.earshot
+  bundleIdPrefix: dev.eknuth.earshot
   deploymentTarget:
     iOS: "17.0"
   createIntermediateGroups: true
@@ -42,7 +42,7 @@ targets:
         UILaunchScreen: {}
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: dev.knuth.earshot.sample
+        PRODUCT_BUNDLE_IDENTIFIER: dev.eknuth.earshot.sample
         CODE_SIGN_STYLE: Automatic
         DEVELOPMENT_TEAM: H7574QMUYG
         ENABLE_PREVIEWS: YES
