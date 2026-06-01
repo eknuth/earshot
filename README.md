@@ -8,13 +8,14 @@
 
 On-device speech-to-text for iOS and Android, from one Kotlin core.
 
+**Docs and quickstart: [eknuth.github.io/earshot](https://eknuth.github.io/earshot/)**
+
 Hand Earshot an audio or video file and it gives you back the transcript, running
 entirely on the phone. No server, no per-user cost, no audio leaving the device. The
 only network call in the whole pipeline is the one-time model download on first run.
 
-Earshot is the transcription engine extracted out of a working app
-([Sitewinder](https://github.com/oregonknuths)), cleaned up into a reusable Kotlin
-Multiplatform library with a small, honest API.
+Earshot is the transcription engine extracted out of a working app and cleaned up
+into a reusable Kotlin Multiplatform library with a small, honest API.
 
 ## What this is, and what it is not
 
