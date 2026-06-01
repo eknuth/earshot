@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and discussion
+    url: https://github.com/eknuth/earshot/discussions
+    about: Ask questions and discuss usage here rather than opening an issue.
+  - name: Security report
+    url: https://github.com/eknuth/earshot/security/policy
+    about: Please report security issues privately. See the security policy.

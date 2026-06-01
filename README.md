@@ -1,5 +1,11 @@
 # Earshot
 
+[![CI](https://github.com/eknuth/earshot/actions/workflows/ci.yml/badge.svg)](https://github.com/eknuth/earshot/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+![Platforms](https://img.shields.io/badge/platforms-iOS%20%7C%20Android-informational)
+![Kotlin](https://img.shields.io/badge/Kotlin-2.0.21-7F52FF?logo=kotlin&logoColor=white)
+![Inference](https://img.shields.io/badge/inference-100%25%20on--device-success)
+
 On-device speech-to-text for iOS and Android, from one Kotlin core.
 
 Hand Earshot an audio or video file and it gives you back the transcript, running
@@ -87,7 +93,7 @@ NativeTranscriptionProviderHolder.shared.implementation = WhisperKitTranscriptio
 // anywhere after
 let transcriber = OnDeviceTranscriber(engine: TranscriptionEngine(),
                                       audioExtractor: AudioExtractor())
-_ = try await transcriber.prepare(config: TranscriptionConfig())
+_ = try await transcriber.prepare()
 let result = try await transcriber.transcribeAudio(wavPath: wavPath)
 ```
 

@@ -25,7 +25,9 @@ class OnDeviceTranscriber(
      * Load the model into memory so transcription can start. Call once before the
      * first transcribe. Returns false if the model is not present or fails to load.
      */
-    suspend fun prepare(config: TranscriptionConfig = TranscriptionConfig()): Boolean =
+    suspend fun prepare(): Boolean = prepare(TranscriptionConfig())
+
+    suspend fun prepare(config: TranscriptionConfig): Boolean =
         engine.initialize(config)
 
     /** True once a model is loaded and ready to transcribe. */

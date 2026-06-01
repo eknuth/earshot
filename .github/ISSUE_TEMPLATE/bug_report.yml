@@ -1,0 +1,65 @@
+name: Bug report
+description: Report a problem with Earshot
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug. Please fill out the sections below so the issue can be reproduced.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: A clear description of the bug and what you expected instead.
+      placeholder: When I call transcribeMedia with a .mov file, it returns an Error with message ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Minimal steps, ideally with a code snippet.
+      placeholder: |
+        1. Download WHISPER_TINY_EN
+        2. Call transcribeAudio with a 16kHz wav
+        3. See the error
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options:
+        - Android
+        - iOS
+        - Both
+    validations:
+      required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: Device and OS version
+      placeholder: Pixel 7, Android 14 / iPhone 14, iOS 17.4
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Earshot version
+      placeholder: 0.1.0 or commit SHA
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Relevant logcat or console output. This will be rendered as code, so no backticks needed.
+      render: shell
+    validations:
+      required: false

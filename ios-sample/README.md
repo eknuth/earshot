@@ -31,6 +31,6 @@ that it runs offline.
   the shared Kotlin `NativeTranscriptionProvider` seam and WhisperKit. It is compiled
   into this sample directly (see `project.yml` sources).
 
-The Kotlin sealed `TranscriptionEngineResult` surfaces in Swift as
-`TranscriptionEngineResultSuccess` / `TranscriptionEngineResultError`; the sample
+The Kotlin sealed `TranscriptionEngineResult` surfaces in Swift as the nested
+`TranscriptionEngineResult.Success` / `TranscriptionEngineResult.Error`; the sample
 type-checks with `as?`.

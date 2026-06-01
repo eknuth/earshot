@@ -33,6 +33,16 @@ struct ContentView: View {
                     .buttonStyle(.borderedProminent)
                     .disabled(busy)
 
+                Button("Transcribe bundled sample") {
+                    if let url = Bundle.main.url(forResource: "sample", withExtension: "wav") {
+                        transcribe(url)
+                    } else {
+                        status = "Bundled sample.wav not found in app bundle"
+                    }
+                }
+                .buttonStyle(.bordered)
+                .disabled(busy)
+
                 if busy { ProgressView().frame(maxWidth: .infinity) }
 
                 Text(status).font(.footnote).foregroundStyle(.secondary)
@@ -73,7 +83,7 @@ struct ContentView: View {
                 let transcriber = OnDeviceTranscriber(engine: TranscriptionEngine(),
                                                       audioExtractor: AudioExtractor())
                 status = "Loading model (first run downloads it)..."
-                _ = try await transcriber.prepare(config: TranscriptionConfig())
+                _ = try await transcriber.prepare()
 
                 status = "Transcribing on-device..."
                 let scratch = FileManager.default.temporaryDirectory
@@ -82,10 +92,10 @@ struct ContentView: View {
                                                                    scratchWavPath: scratch)
                 transcriber.release()
 
-                if let ok = result as? TranscriptionEngineResultSuccess {
+                if let ok = result as? TranscriptionEngineResult.Success {
                     transcript = ok.text
                     status = "Done on-device in \(ok.processingTimeMs) ms"
-                } else if let err = result as? TranscriptionEngineResultError {
+                } else if let err = result as? TranscriptionEngineResult.Error {
                     status = "Error: \(err.message)"
                 }
             } catch {

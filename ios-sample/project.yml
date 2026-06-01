@@ -44,8 +44,10 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: dev.knuth.earshot.sample
         CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: H7574QMUYG
         ENABLE_PREVIEWS: YES
         SWIFT_VERSION: "5.0"
+        TARGETED_DEVICE_FAMILY: "1,2"
     dependencies:
       # Link the KMP framework produced by the pre-build run script below.
       - framework: Earshot.framework
@@ -59,4 +61,5 @@ targets:
         basedOnDependencyAnalysis: false
         script: |
           cd "$SRCROOT/.." && \
+          JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home \
           ./gradlew :earshot:embedAndSignAppleFrameworkForXcode

@@ -1,0 +1,336 @@
+- generic [active] [ref=e1]:
+  - link "Skip to content" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "Earshot home" [ref=e5] [cursor=pointer]:
+        - /url: "#top"
+        - img [ref=e7]
+        - text: Earshot
+      - navigation "Primary" [ref=e9]:
+        - link "How it works" [ref=e10] [cursor=pointer]:
+          - /url: "#how"
+        - link "Quickstart" [ref=e11] [cursor=pointer]:
+          - /url: "#quickstart"
+        - link "API" [ref=e12] [cursor=pointer]:
+          - /url: "#api"
+        - link "Measuring" [ref=e13] [cursor=pointer]:
+          - /url: "#measure"
+        - link "Models" [ref=e14] [cursor=pointer]:
+          - /url: "#models"
+        - link "GitHub" [ref=e15] [cursor=pointer]:
+          - /url: https://github.com/eknuth/earshot
+          - img [ref=e16]
+          - text: GitHub
+  - main [ref=e18]:
+    - generic [ref=e20]:
+      - generic [ref=e21]:
+        - generic [ref=e22]: Fully on-device · open source
+        - heading "On-device speech to text for iOS and Android, from one Kotlin core." [level=1] [ref=e24]
+        - paragraph [ref=e25]:
+          - text: Hand Earshot an audio or video file and it gives you back the transcript, running entirely on the phone.
+          - strong [ref=e26]: No server, no per-user cost, no audio leaving the device.
+          - text: The only network call in the whole pipeline is the one-time model download on first run.
+        - generic [ref=e27]:
+          - link "Get started" [ref=e28] [cursor=pointer]:
+            - /url: "#quickstart"
+            - img [ref=e29]
+            - text: Get started
+          - link "View on GitHub" [ref=e31] [cursor=pointer]:
+            - /url: https://github.com/eknuth/earshot
+            - img [ref=e32]
+            - text: View on GitHub
+        - generic [ref=e34]:
+          - generic [ref=e35]:
+            - img [ref=e36]
+            - text: Audio never leaves the phone
+          - generic [ref=e39]:
+            - img [ref=e40]
+            - text: No per-user inference cost
+          - generic [ref=e42]:
+            - img [ref=e43]
+            - text: MIT licensed
+      - generic [ref=e45]:
+        - generic [ref=e46]:
+          - generic [ref=e47]: EARSHOT · ON DEVICE
+          - generic [ref=e49]:
+            - img [ref=e50]
+            - text: secure
+        - generic [ref=e55]: Transcribed on this device, no network round trip.
+        - generic [ref=e57]:
+          - generic [ref=e58]: whisper · 16kHz mono
+          - generic [ref=e59]:
+            - img [ref=e60]
+            - generic [ref=e62]: "0"
+            - text: bytes uploaded
+    - generic [ref=e64]:
+      - generic [ref=e65]:
+        - paragraph [ref=e66]: How it works
+        - heading "Same model family, two on-device runtimes, one shared Kotlin core." [level=2] [ref=e67]
+        - paragraph [ref=e68]: "Earshot is the integration layer around an off-the-shelf model: getting it onto the device, extracting clean 16kHz audio from whatever file you started with, running it inside a phone's memory and battery budget, and exposing one API that behaves the same on both platforms."
+      - generic [ref=e69]:
+        - generic [ref=e70]:
+          - text: "01"
+          - img [ref=e72]
+          - heading "Input file" [level=3] [ref=e75]
+          - paragraph [ref=e76]: An audio or video file from anywhere on the device.
+        - generic [ref=e77]:
+          - text: "02"
+          - img [ref=e79]
+          - heading "Audio extraction" [level=3] [ref=e81]
+          - paragraph [ref=e82]: Decode to clean 16kHz mono PCM, on-device, per platform.
+        - generic [ref=e83]:
+          - text: "03"
+          - img [ref=e85]
+          - heading "Whisper runtime" [level=3] [ref=e89]
+          - paragraph [ref=e90]: WhisperKit on iOS, ONNX Runtime on Android. Same model family.
+        - generic [ref=e91]:
+          - text: "04"
+          - img [ref=e93]
+          - heading "Transcript" [level=3] [ref=e95]
+          - paragraph [ref=e96]: Text, language, confidence, and timing returned to you.
+      - table "Per-platform implementation of each pipeline stage" [ref=e98]:
+        - rowgroup [ref=e99]:
+          - row "Stage iOS Android" [ref=e100]:
+            - columnheader "Stage" [ref=e101]
+            - columnheader "iOS" [ref=e102]
+            - columnheader "Android" [ref=e103]
+        - rowgroup [ref=e104]:
+          - row "Audio extraction AVFoundation (AVAssetReader) MediaExtractor + MediaCodec" [ref=e105]:
+            - rowheader "Audio extraction" [ref=e106]
+            - cell "AVFoundation (AVAssetReader)" [ref=e107]:
+              - text: AVFoundation (
+              - code [ref=e108]: AVAssetReader
+              - text: )
+            - cell "MediaExtractor + MediaCodec" [ref=e109]:
+              - code [ref=e110]: MediaExtractor
+              - text: +
+              - code [ref=e111]: MediaCodec
+          - row "ASR runtime WhisperKit (CoreML) ONNX Runtime + Extensions" [ref=e112]:
+            - rowheader "ASR runtime" [ref=e113]
+            - cell "WhisperKit (CoreML)" [ref=e114]
+            - cell "ONNX Runtime + Extensions" [ref=e115]
+          - row "Model Whisper (CoreML, fetched + cached by WhisperKit) Whisper (Olive ONNX, int8)" [ref=e116]:
+            - rowheader "Model" [ref=e117]
+            - cell "Whisper (CoreML, fetched + cached by WhisperKit)" [ref=e118]
+            - cell "Whisper (Olive ONNX, int8)" [ref=e119]
+          - row "Model download WhisperKit, internal ModelDownloader (plain HTTPS)" [ref=e120]:
+            - rowheader "Model download" [ref=e121]
+            - cell "WhisperKit, internal" [ref=e122]
+            - cell "ModelDownloader (plain HTTPS)" [ref=e123]:
+              - code [ref=e124]: ModelDownloader
+              - text: (plain HTTPS)
+      - generic [ref=e125]:
+        - img [ref=e126]
+        - generic [ref=e128]:
+          - text: The cross-platform contract lives in
+          - code [ref=e129]: commonMain
+          - text: as
+          - code [ref=e130]: expect
+          - text: classes (
+          - strong [ref=e131]: AudioExtractor
+          - text: ","
+          - strong [ref=e132]: TranscriptionEngine
+          - text: ","
+          - strong [ref=e133]: ModelDownloader
+          - text: ) with platform
+          - code [ref=e134]: actual
+          - text: implementations.
+          - strong [ref=e135]: OnDeviceTranscriber
+          - text: is a thin facade that wires the extractor and engine together.
+    - generic [ref=e137]:
+      - generic [ref=e138]:
+        - paragraph [ref=e139]: Quickstart
+        - heading "Pick a file, transcribe on-device, read the text back." [level=2] [ref=e140]
+        - paragraph [ref=e141]:
+          - text: The whole surface is one facade. Each platform builds the engine and extractor its own way, then hands both to
+          - code [ref=e142]: OnDeviceTranscriber
+          - text: . Here is the real wiring from each sample app.
+      - tablist "Quickstart platform" [ref=e143]:
+        - tab "Android" [selected] [ref=e144] [cursor=pointer]:
+          - img [ref=e145]
+          - text: Android
+        - tab "iOS" [ref=e147] [cursor=pointer]:
+          - img [ref=e148]
+          - text: iOS
+      - tabpanel "Android" [ref=e150]:
+        - paragraph [ref=e151]: "A minimal Compose flow: make sure the Whisper model is present, wire the engine and extractor, then transcribe a media file on-device."
+        - generic [ref=e152]:
+          - generic [ref=e153]:
+            - generic [ref=e158]: MainActivity.kt
+            - button "Copy code to clipboard" [ref=e159] [cursor=pointer]:
+              - img [ref=e160]
+              - generic [ref=e163]: Copy
+          - status [ref=e164]
+          - code [ref=e166]:
+            - text: "val modelsDir = File(context.filesDir, \"models\") val downloader = ModelDownloader(modelsDir) downloader.downloadModelSync(WhisperModels.WHISPER_TINY_EN) val engine = TranscriptionEngine().apply { setModelPath(File(modelsDir, WhisperModels.WHISPER_TINY_EN.name).absolutePath) } val transcriber = OnDeviceTranscriber(engine, AudioExtractor()) transcriber.prepare() when (val r = transcriber.transcribeMedia(videoPath,"
+            - generic [ref=e167]: "\"${context.cacheDir}/clip.wav\""
+            - text: ")) { is TranscriptionEngineResult.Success -> println("
+            - generic [ref=e168]: "\"${r.text} (${r.processingTimeMs}ms)\""
+            - text: ) is TranscriptionEngineResult.Error -> println(
+            - generic [ref=e169]: "\"failed: ${r.message}\""
+            - text: ") }"
+    - generic [ref=e171]:
+      - generic [ref=e172]:
+        - paragraph [ref=e173]: API surface
+        - heading "One small, honest facade." [level=2] [ref=e174]
+        - paragraph [ref=e175]:
+          - code [ref=e176]: OnDeviceTranscriber(engine, audioExtractor)
+          - text: is the whole public surface. Both dependencies are injected because each platform builds them differently.
+      - generic [ref=e177]:
+        - generic [ref=e178]:
+          - generic [ref=e179]:
+            - generic [ref=e180]: suspend fun prepare(config)
+            - generic [ref=e181]: Load the model into memory so transcription can start. Call once before the first transcribe. Returns false if the model is not present or fails to load.
+          - generic [ref=e182]:
+            - generic [ref=e183]: fun isReady()
+            - generic [ref=e184]: True once a model is loaded and ready to transcribe.
+          - generic [ref=e185]:
+            - generic [ref=e186]: fun modelStatus()
+            - generic [ref=e187]: "Current model status: not downloaded, downloading, ready, or error."
+          - generic [ref=e188]:
+            - generic [ref=e189]: suspend fun transcribeAudio(wavPath)
+            - generic [ref=e190]: Transcribe a 16kHz mono PCM WAV file already on the device.
+          - generic [ref=e191]:
+            - generic [ref=e192]: suspend fun transcribeMedia(mediaPath, scratchWavPath)
+            - generic [ref=e193]: Extract audio from a video or any AV file on-device, then transcribe it.
+          - generic [ref=e194]:
+            - generic [ref=e195]: fun release()
+            - generic [ref=e196]: Release the model and any native resources.
+        - complementary "Result type" [ref=e197]:
+          - heading "TranscriptionEngineResult" [level=3] [ref=e198]
+          - generic [ref=e199]:
+            - generic [ref=e200]: Success
+            - generic [ref=e201]: text, language, confidence, processingTimeMs
+          - generic [ref=e202]:
+            - generic [ref=e203]: Error
+            - generic [ref=e204]: message, cause
+          - paragraph [ref=e205]: A sealed result type, so every call site handles both outcomes at compile time.
+    - generic [ref=e208]:
+      - generic [ref=e209]:
+        - heading "Word error rate" [level=3] [ref=e210]
+        - paragraph [ref=e211]: Lower is better · standard WER benchmark
+        - generic [ref=e212]:
+          - generic [ref=e213]: Whisper, one size up
+          - generic [ref=e214]: 9.57%
+        - generic [ref=e216]:
+          - generic [ref=e217]: Whisper, smaller checkpoint
+          - generic [ref=e218]: 12.16%
+        - generic [ref=e220]:
+          - generic [ref=e221]: Apple built-in on-device recognizer
+          - generic [ref=e222]: higher
+        - paragraph [ref=e224]: Both Whisper checkpoints come out ahead of Apple's built-in on-device recognizer on the same benchmark. Bars are scaled relative to the highest value shown.
+      - generic [ref=e225]:
+        - paragraph [ref=e226]: Measuring it
+        - heading "The point of on-device is that you can prove it where it runs." [level=2] [ref=e227]
+        - paragraph [ref=e228]: On a standard word-error-rate benchmark the smaller Whisper checkpoint lands around 12.16% word error, and the next size up around 9.57%, at almost no latency cost.
+        - generic [ref=e229]:
+          - generic [ref=e230]: 21%
+          - generic [ref=e231]: relative cut in word error for one step up in model size.
+        - generic [ref=e232]:
+          - strong [ref=e233]: "One caveat worth stating:"
+          - text: the checkpoint you benchmark in a lab and the quantized build that actually runs on the phone are not identical. So the number that counts is the one you get from scoring the on-device model on a real device. Measure where the software runs, not where it is convenient.
+    - generic [ref=e236]:
+      - img [ref=e238]
+      - generic [ref=e241]:
+        - heading "What this is, and what it is not." [level=2] [ref=e242]
+        - paragraph [ref=e243]:
+          - text: I did not train a speech model.
+          - strong [ref=e244]: Whisper is OpenAI's.
+          - text: On iOS the Whisper runtime is
+          - link "WhisperKit" [ref=e245] [cursor=pointer]:
+            - /url: https://github.com/argmaxinc/WhisperKit
+          - text: by Argmax. On Android the model is a Microsoft Olive export of Whisper running on ONNX Runtime.
+        - paragraph [ref=e246]: "Earshot is the part around the model: getting it onto the device, extracting clean 16kHz audio from whatever file you started with, running the model inside a phone's memory and battery budget, and exposing one API that behaves the same on both platforms. That integration layer is the hard, unglamorous part of shipping a model onto someone's phone, and it is the part this library is about."
+    - generic [ref=e248]:
+      - generic [ref=e249]:
+        - paragraph [ref=e250]: Models and licenses
+        - heading "Credit where it is due." [level=2] [ref=e251]
+        - paragraph [ref=e252]: Earshot's own code is MIT. The speech models and runtimes it loads are third-party and carry their own licenses. Earshot does not redistribute model weights; they are fetched on-device at runtime from the sources below.
+      - generic [ref=e253]:
+        - link "Speech-to-text model Whisper MIT OpenAI's open speech recognition model, the shared model family across both platforms. openai/whisper" [ref=e254] [cursor=pointer]:
+          - /url: https://github.com/openai/whisper
+          - text: Speech-to-text model
+          - heading "Whisper MIT" [level=3] [ref=e255]:
+            - text: Whisper
+            - generic [ref=e256]: MIT
+          - paragraph [ref=e257]: OpenAI's open speech recognition model, the shared model family across both platforms.
+          - generic [ref=e258]:
+            - text: openai/whisper
+            - img [ref=e259]
+        - link "iOS CoreML runtime WhisperKit MIT Argmax's CoreML runtime for Whisper, powering the iOS transcription path. argmaxinc/WhisperKit" [ref=e261] [cursor=pointer]:
+          - /url: https://github.com/argmaxinc/WhisperKit
+          - text: iOS CoreML runtime
+          - heading "WhisperKit MIT" [level=3] [ref=e262]:
+            - text: WhisperKit
+            - generic [ref=e263]: MIT
+          - paragraph [ref=e264]: Argmax's CoreML runtime for Whisper, powering the iOS transcription path.
+          - generic [ref=e265]:
+            - text: argmaxinc/WhisperKit
+            - img [ref=e266]
+        - link "Android model artifact Whisper Olive ONNX MIT A Microsoft Olive export of Whisper, the int8 model artifact used on Android. microsoft/onnxruntime-inference-examples" [ref=e268] [cursor=pointer]:
+          - /url: https://github.com/microsoft/onnxruntime-inference-examples/tree/main/mobile/examples/whisper/local/android
+          - text: Android model artifact
+          - heading "Whisper Olive ONNX MIT" [level=3] [ref=e269]:
+            - text: Whisper Olive ONNX
+            - generic [ref=e270]: MIT
+          - paragraph [ref=e271]: A Microsoft Olive export of Whisper, the int8 model artifact used on Android.
+          - generic [ref=e272]:
+            - text: microsoft/onnxruntime-inference-examples
+            - img [ref=e273]
+        - link "Android inference runtime ONNX Runtime + Extensions MIT / Apache-2.0 Microsoft's cross-platform inference runtime, executing Whisper on Android. microsoft/onnxruntime" [ref=e275] [cursor=pointer]:
+          - /url: https://github.com/microsoft/onnxruntime
+          - text: Android inference runtime
+          - heading "ONNX Runtime + Extensions MIT / Apache-2.0" [level=3] [ref=e276]:
+            - text: ONNX Runtime + Extensions
+            - generic [ref=e277]: MIT / Apache-2.0
+          - paragraph [ref=e278]: Microsoft's cross-platform inference runtime, executing Whisper on Android.
+          - generic [ref=e279]:
+            - text: microsoft/onnxruntime
+            - img [ref=e280]
+      - paragraph [ref=e282]:
+        - strong [ref=e283]: "License:"
+        - text: Earshot is MIT. The bundled integration code is MIT; the speech models it loads carry their own licenses. See
+        - link "MODELS.md" [ref=e284] [cursor=pointer]:
+          - /url: https://github.com/eknuth/earshot/blob/main/MODELS.md
+        - text: for each model, its source, and its license, and
+        - link "LICENSE" [ref=e285] [cursor=pointer]:
+          - /url: https://github.com/eknuth/earshot/blob/main/LICENSE
+        - text: for the full text.
+    - generic [ref=e287]:
+      - heading "Speech to text that never leaves the phone." [level=2] [ref=e288]:
+        - text: Speech to text that
+        - emphasis [ref=e289]: never leaves the phone.
+      - paragraph [ref=e290]: Transcription is real and working on both platforms today. Audio extraction, the Whisper runtimes, and model download all run on-device.
+      - generic [ref=e291]:
+        - link "Clone the repo" [ref=e292] [cursor=pointer]:
+          - /url: https://github.com/eknuth/earshot
+          - img [ref=e293]
+          - text: Clone the repo
+        - link "Read the quickstart" [ref=e295] [cursor=pointer]:
+          - /url: "#quickstart"
+  - contentinfo [ref=e296]:
+    - generic [ref=e297]:
+      - generic [ref=e298]:
+        - link "Earshot home" [ref=e299] [cursor=pointer]:
+          - /url: "#top"
+          - img [ref=e301]
+          - text: Earshot
+        - navigation "Footer" [ref=e303]:
+          - link "How it works" [ref=e304] [cursor=pointer]:
+            - /url: "#how"
+          - link "Quickstart" [ref=e305] [cursor=pointer]:
+            - /url: "#quickstart"
+          - link "API" [ref=e306] [cursor=pointer]:
+            - /url: "#api"
+          - link "Measuring" [ref=e307] [cursor=pointer]:
+            - /url: "#measure"
+          - link "Models" [ref=e308] [cursor=pointer]:
+            - /url: "#models"
+          - link "GitHub" [ref=e309] [cursor=pointer]:
+            - /url: https://github.com/eknuth/earshot
+      - paragraph [ref=e310]:
+        - text: Open source under the MIT license. Whisper is OpenAI's; the iOS runtime is
+        - link "WhisperKit" [ref=e311] [cursor=pointer]:
+          - /url: https://github.com/argmaxinc/WhisperKit
+        - text: by Argmax; the Android path runs a Microsoft Olive export of Whisper on ONNX Runtime. Earshot is the integration layer around those, and the models it loads carry their own licenses.

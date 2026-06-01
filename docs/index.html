@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Earshot · On-device speech to text for iOS and Android</title>
+<meta name="description" content="Earshot is an open-source on-device speech-to-text SDK for iOS and Android, built from one Kotlin Multiplatform core. Hand it an audio or video file, get a transcript back. Nothing leaves the phone." />
+<meta name="color-scheme" content="dark" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Earshot · On-device speech to text for iOS and Android" />
+<meta property="og:description" content="One Kotlin core. Whisper on both platforms via WhisperKit on iOS and ONNX Runtime on Android. The only network call is the one-time model download." />
+<meta property="og:url" content="https://eknuth.github.io/earshot/" />
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0f1a'/%3E%3Cg stroke='%23f5a623' stroke-width='2.6' stroke-linecap='round'%3E%3Cline x1='8' y1='13' x2='8' y2='19'/%3E%3Cline x1='13' y1='9' x2='13' y2='23'/%3E%3Cline x1='18' y1='6' x2='18' y2='26'/%3E%3Cline x1='23' y1='11' x2='23' y2='21'/%3E%3C/g%3E%3C/svg%3E" />
+
+<!-- Fonts: Fraunces (display), Spline Sans (body), JetBrains Mono (code/labels) -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..600;1,9..144,400..600&family=Spline+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<!-- Syntax highlighting (lightweight, CDN, no build) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/black-metal.min.css" />
+
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body class="preload">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="site-header">
+  <div class="shell nav">
+    <a class="brand" href="#top" aria-label="Earshot home">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none">
+          <g stroke="currentColor" stroke-width="2.6" stroke-linecap="round" style="color:var(--amber)">
+            <line x1="6" y1="13" x2="6" y2="19"/>
+            <line x1="11" y1="9" x2="11" y2="23"/>
+            <line x1="16" y1="5" x2="16" y2="27"/>
+            <line x1="21" y1="9" x2="21" y2="23"/>
+            <line x1="26" y1="13" x2="26" y2="19"/>
+          </g>
+        </svg>
+      </span>
+      Earshot
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#how">How it works</a>
+      <a href="#quickstart">Quickstart</a>
+      <a href="#api">API</a>
+      <a href="#measure">Measuring</a>
+      <a href="#models">Models</a>
+      <a class="nav-cta" href="https://github.com/eknuth/earshot" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub
+      </a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<span id="top"></span>
+
+<!-- ======================= HERO ======================= -->
+<section class="hero">
+  <div class="shell hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow load-item"><span class="dot" aria-hidden="true"></span> Fully on-device · open source</span>
+      <h1 class="load-item">On-device speech to text for iOS and Android, from <span class="accent">one Kotlin core.</span></h1>
+      <p class="hero-lede load-item">
+        Hand Earshot an audio or video file and it gives you back the transcript, running
+        entirely on the phone. <strong>No server, no per-user cost, no audio leaving the device.</strong>
+        The only network call in the whole pipeline is the one-time model download on first run.
+      </p>
+      <div class="hero-actions load-item">
+        <a class="btn btn-primary" href="#quickstart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="8 18 14 12 8 6"/><line x1="3" y1="12" x2="21" y2="12"/></svg>
+          Get started
+        </a>
+        <a class="btn btn-ghost" href="https://github.com/eknuth/earshot" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          View on GitHub
+        </a>
+      </div>
+      <div class="trust-row load-item">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Audio never leaves the phone</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 3 7v5c0 5 3.8 8.4 9 10 5.2-1.6 9-5 9-10V7l-9-5z"/></svg> No per-user inference cost</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> MIT licensed</span>
+      </div>
+    </div>
+
+    <!-- Device panel: the on-device privacy visualization (the screenshot moment) -->
+    <div class="device load-item" aria-hidden="true">
+      <div class="device-glow" aria-hidden="true"></div>
+      <div class="device-top">
+        <span class="device-id"><span class="rec-dot"></span> EARSHOT · ON DEVICE</span>
+        <span class="device-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          secure
+        </span>
+      </div>
+
+      <!-- Live waveform: a real amplitude envelope, with a sweeping capture playhead -->
+      <div class="wave" data-wave>
+        <div class="wave-playhead"></div>
+      </div>
+
+      <div class="device-transcript">
+        <span class="line-done">Transcribed on this device,</span>
+        <span class="line-live">no network round trip.</span><span class="cursor"></span>
+      </div>
+
+      <!-- Privacy ledger: the uplink is physically zero -->
+      <div class="device-meta">
+        <span class="meta-model">whisper · 16kHz mono</span>
+        <span class="net" data-uplink>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m6 11 6-6 6 6"/></svg>
+          <span class="net-num">0</span> bytes uploaded
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= HOW IT WORKS ======================= -->
+<section class="section" id="how">
+  <div class="shell">
+    <div class="section-head reveal">
+      <p class="kicker">How it works</p>
+      <h2>Same model family, two on-device runtimes, one shared Kotlin core.</h2>
+      <p class="sub">
+        Earshot is the integration layer around an off-the-shelf model: getting it onto the
+        device, extracting clean 16kHz audio from whatever file you started with, running it
+        inside a phone's memory and battery budget, and exposing one API that behaves the same
+        on both platforms.
+      </p>
+    </div>
+
+    <div class="pipeline reveal">
+      <div class="stage">
+        <span class="num">01</span>
+        <div class="stage-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <h3>Input file</h3>
+        <p>An audio or video file from anywhere on the device.</p>
+      </div>
+      <div class="stage">
+        <span class="num">02</span>
+        <div class="stage-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></div>
+        <h3>Audio extraction</h3>
+        <p>Decode to clean 16kHz mono PCM, on-device, per platform.</p>
+      </div>
+      <div class="stage">
+        <span class="num">03</span>
+        <div class="stage-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/></svg></div>
+        <h3>Whisper runtime</h3>
+        <p>WhisperKit on iOS, ONNX Runtime on Android. Same model family.</p>
+      </div>
+      <div class="stage">
+        <span class="num">04</span>
+        <div class="stage-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <h3>Transcript</h3>
+        <p>Text, language, confidence, and timing returned to you.</p>
+      </div>
+    </div>
+
+    <div class="platform-table-wrap reveal">
+      <table class="platforms">
+        <caption>Per-platform implementation of each pipeline stage</caption>
+        <thead>
+          <tr>
+            <th scope="col">Stage</th>
+            <th scope="col" class="col-ios">iOS</th>
+            <th scope="col" class="col-android">Android</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Audio extraction</th>
+            <td>AVFoundation (<code>AVAssetReader</code>)</td>
+            <td><code>MediaExtractor</code> + <code>MediaCodec</code></td>
+          </tr>
+          <tr>
+            <th scope="row">ASR runtime</th>
+            <td>WhisperKit (CoreML)</td>
+            <td>ONNX Runtime + Extensions</td>
+          </tr>
+          <tr>
+            <th scope="row">Model</th>
+            <td>Whisper (CoreML, fetched + cached by WhisperKit)</td>
+            <td>Whisper (Olive ONNX, int8)</td>
+          </tr>
+          <tr>
+            <th scope="row">Model download</th>
+            <td>WhisperKit, internal</td>
+            <td><code>ModelDownloader</code> (plain HTTPS)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="contract-note reveal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      <span>
+        The cross-platform contract lives in <code>commonMain</code> as <code>expect</code> classes
+        (<strong>AudioExtractor</strong>, <strong>TranscriptionEngine</strong>, <strong>ModelDownloader</strong>)
+        with platform <code>actual</code> implementations. <strong>OnDeviceTranscriber</strong> is a thin
+        facade that wires the extractor and engine together.
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= QUICKSTART ======================= -->
+<section class="section" id="quickstart">
+  <div class="shell">
+    <div class="section-head reveal">
+      <p class="kicker">Quickstart</p>
+      <h2>Pick a file, transcribe on-device, read the text back.</h2>
+      <p class="sub">
+        The whole surface is one facade. Each platform builds the engine and extractor its own
+        way, then hands both to <code>OnDeviceTranscriber</code>. Here is the real wiring from
+        each sample app.
+      </p>
+    </div>
+
+    <div class="tabs reveal" role="tablist" aria-label="Quickstart platform">
+      <button class="tab" id="tab-android" role="tab" aria-selected="true" aria-controls="panel-android">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 18a1 1 0 0 0 1 1h1v3.5a1.5 1.5 0 0 0 3 0V19h2v3.5a1.5 1.5 0 0 0 3 0V19h1a1 1 0 0 0 1-1V8H6v10zM3.5 8A1.5 1.5 0 0 0 2 9.5v6a1.5 1.5 0 0 0 3 0v-6A1.5 1.5 0 0 0 3.5 8zm17 0a1.5 1.5 0 0 0-1.5 1.5v6a1.5 1.5 0 0 0 3 0v-6A1.5 1.5 0 0 0 20.5 8zM15.5 3.6l1.3-1.3a.3.3 0 0 0-.42-.42l-1.48 1.48A5.9 5.9 0 0 0 12 2.8c-.85 0-1.66.18-2.4.5L8.12 1.86a.3.3 0 1 0-.42.42l1.3 1.3A5.98 5.98 0 0 0 6 7h12a5.98 5.98 0 0 0-2.5-3.4zM10 5.2a.7.7 0 1 1 0-1.4.7.7 0 0 1 0 1.4zm4 0a.7.7 0 1 1 0-1.4.7.7 0 0 1 0 1.4z"/></svg>
+        Android
+      </button>
+      <button class="tab" id="tab-ios" role="tab" aria-selected="false" aria-controls="panel-ios">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.4 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.47.83-.72 0-1.82-.81-3-.79-1.54.02-2.96.9-3.75 2.28-1.6 2.78-.41 6.89 1.15 9.14.76 1.1 1.67 2.34 2.86 2.29 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.77.74 2.98.72 1.23-.02 2.01-1.12 2.76-2.23.87-1.28 1.23-2.51 1.25-2.58-.03-.01-2.4-.92-2.42-3.65zM14.13 5.9c.63-.77 1.06-1.83.94-2.9-.91.04-2.02.61-2.67 1.37-.58.68-1.09 1.77-.95 2.81 1.02.08 2.05-.52 2.68-1.28z"/></svg>
+        iOS
+      </button>
+    </div>
+
+    <!-- Android panel -->
+    <div class="tabpanel reveal" id="panel-android" role="tabpanel" aria-labelledby="tab-android" tabindex="0">
+      <p class="step-lead">
+        A minimal Compose flow: make sure the Whisper model is present, wire the engine and
+        extractor, then transcribe a media file on-device.
+      </p>
+      <div class="codeblock">
+        <div class="code-bar">
+          <span class="code-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="code-file">MainActivity.kt</span>
+          <button class="copy-btn" type="button" data-copy aria-label="Copy code to clipboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+        <span class="visually-hidden" role="status" aria-live="polite" data-copy-status></span>
+        <pre><code class="language-kotlin">val modelsDir = File(context.filesDir, "models")
+val downloader = ModelDownloader(modelsDir)
+downloader.downloadModelSync(WhisperModels.WHISPER_TINY_EN)
+
+val engine = TranscriptionEngine().apply {
+    setModelPath(File(modelsDir, WhisperModels.WHISPER_TINY_EN.name).absolutePath)
+}
+val transcriber = OnDeviceTranscriber(engine, AudioExtractor())
+transcriber.prepare()
+
+when (val r = transcriber.transcribeMedia(videoPath, "${context.cacheDir}/clip.wav")) {
+    is TranscriptionEngineResult.Success -> println("${r.text} (${r.processingTimeMs}ms)")
+    is TranscriptionEngineResult.Error -> println("failed: ${r.message}")
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- iOS panel -->
+    <div class="tabpanel reveal" id="panel-ios" role="tabpanel" aria-labelledby="tab-ios" tabindex="0" hidden>
+      <p class="step-lead">
+        Register the WhisperKit provider once at launch, then use the same shared API. Add
+        WhisperKit via Swift Package Manager; the reference Swift glue lives in
+        <a href="https://github.com/eknuth/earshot/blob/main/ios-support/WhisperKitTranscriptionProvider.swift" target="_blank" rel="noopener"><code>ios-support/WhisperKitTranscriptionProvider.swift</code></a>.
+      </p>
+      <div class="codeblock">
+        <div class="code-bar">
+          <span class="code-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="code-file">EarshotSampleApp.swift</span>
+          <button class="copy-btn" type="button" data-copy aria-label="Copy code to clipboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+        <span class="visually-hidden" role="status" aria-live="polite" data-copy-status></span>
+        <pre><code class="language-swift">// at launch
+NativeTranscriptionProviderHolder.shared.implementation = WhisperKitTranscriptionProvider()
+
+// anywhere after
+let transcriber = OnDeviceTranscriber(engine: TranscriptionEngine(),
+                                      audioExtractor: AudioExtractor())
+_ = try await transcriber.prepare(config: TranscriptionConfig())
+let result = try await transcriber.transcribeAudio(wavPath: wavPath)</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= API ======================= -->
+<section class="section" id="api">
+  <div class="shell">
+    <div class="section-head reveal">
+      <p class="kicker">API surface</p>
+      <h2>One small, honest facade.</h2>
+      <p class="sub">
+        <code>OnDeviceTranscriber(engine, audioExtractor)</code> is the whole public surface.
+        Both dependencies are injected because each platform builds them differently.
+      </p>
+    </div>
+
+    <div class="api-grid">
+      <div class="api-list reveal">
+        <div class="api-method">
+          <span class="sig"><span class="kw">suspend fun</span> prepare(config)</span>
+          <span class="desc">Load the model into memory so transcription can start. Call once before the first transcribe. Returns false if the model is not present or fails to load.</span>
+        </div>
+        <div class="api-method">
+          <span class="sig"><span class="kw">fun</span> isReady()</span>
+          <span class="desc">True once a model is loaded and ready to transcribe.</span>
+        </div>
+        <div class="api-method">
+          <span class="sig"><span class="kw">fun</span> modelStatus()</span>
+          <span class="desc">Current model status: not downloaded, downloading, ready, or error.</span>
+        </div>
+        <div class="api-method">
+          <span class="sig"><span class="kw">suspend fun</span> transcribeAudio(wavPath)</span>
+          <span class="desc">Transcribe a 16kHz mono PCM WAV file already on the device.</span>
+        </div>
+        <div class="api-method">
+          <span class="sig"><span class="kw">suspend fun</span> transcribeMedia(mediaPath, scratchWavPath)</span>
+          <span class="desc">Extract audio from a video or any AV file on-device, then transcribe it.</span>
+        </div>
+        <div class="api-method">
+          <span class="sig"><span class="kw">fun</span> release()</span>
+          <span class="desc">Release the model and any native resources.</span>
+        </div>
+      </div>
+
+      <aside class="result-card reveal" aria-label="Result type">
+        <h3>TranscriptionEngineResult</h3>
+        <div class="result-variant">
+          <span class="tag ok">Success</span>
+          <div class="fields">text, language, confidence, processingTimeMs</div>
+        </div>
+        <div class="result-variant">
+          <span class="tag err">Error</span>
+          <div class="fields">message, cause</div>
+        </div>
+        <p style="margin:18px 0 0;color:var(--fg-faint);font-size:0.88rem;line-height:1.5;">
+          A sealed result type, so every call site handles both outcomes at compile time.
+        </p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= MEASURING ======================= -->
+<section class="section" id="measure">
+  <div class="shell">
+    <div class="measure-grid">
+      <div class="wer-chart reveal" aria-hidden="false">
+        <h3>Word error rate</h3>
+        <p class="axis-note">Lower is better · standard WER benchmark</p>
+
+        <div class="bar-row">
+          <span class="label"><b>Whisper, one size up</b></span>
+          <span class="num">9.57%</span>
+          <div class="bar-track"><div class="bar-fill bigger" data-fill="9.57" style="transform:scaleX(0)"></div></div>
+        </div>
+        <div class="bar-row">
+          <span class="label"><b>Whisper, smaller checkpoint</b></span>
+          <span class="num">12.16%</span>
+          <div class="bar-track"><div class="bar-fill small" data-fill="12.16" style="transform:scaleX(0)"></div></div>
+        </div>
+        <div class="bar-row">
+          <span class="label">Apple built-in on-device recognizer</span>
+          <span class="num">higher</span>
+          <div class="bar-track"><div class="bar-fill apple" data-fill="17" style="transform:scaleX(0)"></div></div>
+        </div>
+
+        <p class="chart-foot">
+          Both Whisper checkpoints come out ahead of Apple's built-in on-device recognizer on
+          the same benchmark. Bars are scaled relative to the highest value shown.
+        </p>
+      </div>
+
+      <div class="measure-copy reveal">
+        <p class="kicker">Measuring it</p>
+        <h2>The point of on-device is that you can prove it where it runs.</h2>
+        <p class="sub">
+          On a standard word-error-rate benchmark the smaller Whisper checkpoint lands around
+          12.16% word error, and the next size up around 9.57%, at almost no latency cost.
+        </p>
+
+        <div class="relcut">
+          <span class="big">21%</span>
+          <span class="cap">relative cut in word error for one step up in model size.</span>
+        </div>
+
+        <div class="caveat">
+          <strong>One caveat worth stating:</strong> the checkpoint you benchmark in a lab and the
+          quantized build that actually runs on the phone are not identical. So the number that
+          counts is the one you get from scoring the on-device model on a real device. Measure
+          where the software runs, not where it is convenient.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= HONESTY ======================= -->
+<section class="section" id="honesty">
+  <div class="shell">
+    <div class="honesty reveal">
+      <div class="badge" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10V5l-8-3z"/><polyline points="9 12 11 14 15 10"/></svg>
+      </div>
+      <div>
+        <h2>What this is, and what it is not.</h2>
+        <p>
+          I did not train a speech model. <strong>Whisper is OpenAI's.</strong> On iOS the Whisper
+          runtime is <a href="https://github.com/argmaxinc/WhisperKit" target="_blank" rel="noopener">WhisperKit</a>
+          by Argmax. On Android the model is a Microsoft Olive export of Whisper running on ONNX Runtime.
+        </p>
+        <p>
+          Earshot is the part around the model: getting it onto the device, extracting clean 16kHz
+          audio from whatever file you started with, running the model inside a phone's memory and
+          battery budget, and exposing one API that behaves the same on both platforms. That
+          integration layer is the hard, unglamorous part of shipping a model onto someone's phone,
+          and it is the part this library is about.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= MODELS / CREDITS ======================= -->
+<section class="section" id="models">
+  <div class="shell">
+    <div class="section-head reveal">
+      <p class="kicker">Models and licenses</p>
+      <h2>Credit where it is due.</h2>
+      <p class="sub">
+        Earshot's own code is MIT. The speech models and runtimes it loads are third-party and
+        carry their own licenses. Earshot does not redistribute model weights; they are fetched
+        on-device at runtime from the sources below.
+      </p>
+    </div>
+
+    <div class="credits-grid reveal">
+      <a class="credit" href="https://github.com/openai/whisper" target="_blank" rel="noopener">
+        <span class="role">Speech-to-text model</span>
+        <h3>Whisper <span class="lic">MIT</span></h3>
+        <p>OpenAI's open speech recognition model, the shared model family across both platforms.</p>
+        <span class="src">openai/whisper <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span>
+      </a>
+      <a class="credit" href="https://github.com/argmaxinc/WhisperKit" target="_blank" rel="noopener">
+        <span class="role">iOS CoreML runtime</span>
+        <h3>WhisperKit <span class="lic">MIT</span></h3>
+        <p>Argmax's CoreML runtime for Whisper, powering the iOS transcription path.</p>
+        <span class="src">argmaxinc/WhisperKit <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span>
+      </a>
+      <a class="credit" href="https://github.com/microsoft/onnxruntime-inference-examples/tree/main/mobile/examples/whisper/local/android" target="_blank" rel="noopener">
+        <span class="role">Android model artifact</span>
+        <h3>Whisper Olive ONNX <span class="lic">MIT</span></h3>
+        <p>A Microsoft Olive export of Whisper, the int8 model artifact used on Android.</p>
+        <span class="src">microsoft/onnxruntime-inference-examples <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span>
+      </a>
+      <a class="credit" href="https://github.com/microsoft/onnxruntime" target="_blank" rel="noopener">
+        <span class="role">Android inference runtime</span>
+        <h3>ONNX Runtime + Extensions <span class="lic">MIT / Apache-2.0</span></h3>
+        <p>Microsoft's cross-platform inference runtime, executing Whisper on Android.</p>
+        <span class="src">microsoft/onnxruntime <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span>
+      </a>
+    </div>
+
+    <p class="license-note reveal">
+      <strong>License:</strong> Earshot is MIT. The bundled integration code is MIT; the speech
+      models it loads carry their own licenses. See
+      <a href="https://github.com/eknuth/earshot/blob/main/MODELS.md" target="_blank" rel="noopener">MODELS.md</a>
+      for each model, its source, and its license, and
+      <a href="https://github.com/eknuth/earshot/blob/main/LICENSE" target="_blank" rel="noopener">LICENSE</a>
+      for the full text.
+    </p>
+  </div>
+</section>
+
+<!-- ======================= FINAL CTA ======================= -->
+<section class="final-cta">
+  <div class="shell">
+    <h2>Speech to text that <em>never leaves the phone.</em></h2>
+    <p>
+      Transcription is real and working on both platforms today. Audio extraction, the Whisper
+      runtimes, and model download all run on-device.
+    </p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="https://github.com/eknuth/earshot" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        Clone the repo
+      </a>
+      <a class="btn btn-ghost" href="#quickstart">Read the quickstart</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="shell">
+    <div class="footer-inner">
+      <a class="brand" href="#top" aria-label="Earshot home">
+        <span class="mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none">
+            <g stroke="currentColor" stroke-width="2.6" stroke-linecap="round" style="color:var(--amber)">
+              <line x1="6" y1="13" x2="6" y2="19"/><line x1="11" y1="9" x2="11" y2="23"/><line x1="16" y1="5" x2="16" y2="27"/><line x1="21" y1="9" x2="21" y2="23"/><line x1="26" y1="13" x2="26" y2="19"/>
+            </g>
+          </svg>
+        </span>
+        Earshot
+      </a>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="#how">How it works</a>
+        <a href="#quickstart">Quickstart</a>
+        <a href="#api">API</a>
+        <a href="#measure">Measuring</a>
+        <a href="#models">Models</a>
+        <a href="https://github.com/eknuth/earshot" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+    </div>
+    <p class="footer-note">
+      Open source under the MIT license. Whisper is OpenAI's; the iOS runtime is
+      <a href="https://github.com/argmaxinc/WhisperKit" target="_blank" rel="noopener">WhisperKit</a>
+      by Argmax; the Android path runs a Microsoft Olive export of Whisper on ONNX Runtime. Earshot
+      is the integration layer around those, and the models it loads carry their own licenses.
+    </p>
+  </div>
+</footer>
+
+<!-- highlight.js core + only the languages we use -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/kotlin.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/swift.min.js"></script>
+<script src="site.js" defer></script>
+</body>
+</html>
