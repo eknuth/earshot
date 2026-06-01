@@ -1,6 +1,7 @@
 # Earshot
 
 [![CI](https://github.com/eknuth/earshot/actions/workflows/ci.yml/badge.svg)](https://github.com/eknuth/earshot/actions/workflows/ci.yml)
+[![Maven Central](https://img.shields.io/maven-central/v/dev.eknuth/earshot?label=Maven%20Central)](https://central.sonatype.com/artifact/dev.eknuth/earshot)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 ![Platforms](https://img.shields.io/badge/platforms-iOS%20%7C%20Android-informational)
 ![Kotlin](https://img.shields.io/badge/Kotlin-2.0.21-7F52FF?logo=kotlin&logoColor=white)
