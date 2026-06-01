@@ -79,6 +79,13 @@ actual class TranscriptionEngine {
                 val sessionOptions = OrtSession.SessionOptions().apply {
                     setIntraOpNumThreads(4)
                     setOptimizationLevel(OrtSession.SessionOptions.OptLevel.ALL_OPT)
+                    // On-device memory tuning. ONNX Runtime's default CPU arena pre-allocates and
+                    // pools large blocks for speed; on a phone that pool dominates peak memory. We
+                    // turn the arena off and disable memory-pattern pre-planning so transient
+                    // tensors are freed between runs. Peak footprint drops sharply for a small,
+                    // bounded latency cost, which is the right trade on hardware the user owns.
+                    setCPUArenaAllocator(false)
+                    setMemoryPatternOptimization(false)
                     // Register ONNX Runtime Extensions for custom operators (BpeDecoder, etc.)
                     registerCustomOpLibrary(OrtxPackage.getLibraryPath())
                 }
