@@ -172,6 +172,8 @@ table.rt-table tbody tr:hover td, table.rt-table tbody tr:hover th { background:
 }
 .bar-fill.android { background: linear-gradient(90deg, var(--cyan-deep), var(--cyan)); }
 .bar-fill.ios { background: linear-gradient(90deg, hsl(258 60% 56%), var(--violet)); }
+/* Apple's recognizer (accuracy-only comparison) reads neutral grey, not a platform color. */
+.bar-fill.apple { background: linear-gradient(90deg, hsl(220 8% 42%), hsl(220 8% 56%)); }
 /* Non-real-device speed/memory bars are hatched + dimmed: real, but not representative. */
 .bar-fill.unrep {
   opacity: 0.6;

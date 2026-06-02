@@ -37,8 +37,8 @@ async function main() {
   }
   root.innerHTML = '';
   const runtimes = data.runtimes || [];
-  const android = runtimes.find((r) => platKey(r) === 'android');
-  const ios = runtimes.find((r) => platKey(r) === 'ios');
+  const android = runtimes.find((r) => platKey(r) === 'android' && !r.accuracyOnly);
+  const ios = runtimes.find((r) => platKey(r) === 'ios' && !r.accuracyOnly);
   const allReal = runtimes.every(isReal);
 
   root.appendChild(deltaCard(android, ios, allReal));
@@ -105,24 +105,30 @@ function comparisonBlock(runtimes) {
       <th>Runtime</th><th>Model</th><th>WER</th><th>Median RTF</th>
       <th>Peak memory</th><th>Cold load</th><th>Device</th><th>Provenance</th>
     </tr></thead>`;
+  const na = '<span style="color:var(--fg-faint)">n/a</span>';
   const rows = runtimes.map((r) => `
     <tr class="row-${platKey(r)}">
       <th scope="row">${r.runtime}<span class="rt-plat">${r.platform}</span></th>
       <td>${r.model}</td>
       <td><span class="big">${pct(r.werPercent)}</span></td>
-      <td>${rtf(r.medianRtf)}</td>
-      <td>${mb(r.peakMemoryBytes)}</td>
-      <td>${secs(r.loadMs)}</td>
+      <td>${r.accuracyOnly ? na : rtf(r.medianRtf)}</td>
+      <td>${r.accuracyOnly ? na : mb(r.peakMemoryBytes)}</td>
+      <td>${r.accuracyOnly ? na : secs(r.loadMs)}</td>
       <td>${r.device}<br><span style="color:var(--fg-faint);font-size:0.8em">${r.osVersion}</span></td>
       <td>${provBadge(r.provenance)}</td>
     </tr>`).join('');
+  const hasAccuracyOnly = runtimes.some((r) => r.accuracyOnly);
+  const foot = hasAccuracyOnly
+    ? `<p class="chart-foot">n/a: Apple's recognizer runs in a system process, so its speed, memory and load are not measured the same way as the in-process runtimes. It is compared on accuracy only.</p>`
+    : '';
   wrap.innerHTML = `<table class="rt-table">${head}<tbody>${rows}</tbody></table>`;
   block.appendChild(wrap);
+  block.insertAdjacentHTML('beforeend', foot);
   return block;
 }
 
 function barLine(r, value, label, scale) {
-  const k = platKey(r);
+  const k = r.accuracyOnly ? 'apple' : platKey(r);
   const unrep = (label !== 'wer' && !isReal(r)) ? ' unrep' : '';
   return `<div class="bar-item">
       <div class="blabel"><b>${r.platform}</b> · ${r.runtime}</div>
@@ -141,9 +147,12 @@ function werChart(runtimes) {
   const card = $('div', 'chart-card');
   const max = Math.max(...runtimes.map((r) => r.werPercent), 0.001);
   const lines = runtimes.map((r) => barLine(r, pct(r.werPercent), 'wer', r.werPercent / max)).join('');
+  const hasApple = runtimes.some((r) => r.accuracyOnly);
+  const foot = hasApple
+    ? `Earshot runs Whisper <code style="color:var(--amber)">tiny.en</code> on both platforms; Apple's built-in on-device recognizer is shown for comparison, on the same clips. Bars scaled to the highest value shown.`
+    : `Bars scaled to the highest value shown. Both runtimes run Whisper <code style="color:var(--amber)">tiny.en</code>; the spread is the runtime and quantization, not the model.`;
   card.innerHTML = `<div class="chart-head"><h3>Accuracy</h3><span class="hint">lower is better</span></div>${lines}
-    <p class="chart-foot">Bars scaled to the highest value shown. Both runtimes run Whisper
-    <code style="color:var(--amber)">tiny.en</code>; the spread is the runtime and quantization, not the model.</p>`;
+    <p class="chart-foot">${foot}</p>`;
   block.appendChild(card);
   return block;
 }
@@ -156,13 +165,15 @@ function perfChart(runtimes, kind) {
        duration. <b>0.20× means a minute of audio in twelve seconds.</b> Lower is faster.</p>`
     : `<h2>Peak memory</h2><p class="block-sub">Highest process footprint observed across the run.</p>`;
   const card = $('div', 'chart-card');
-  const vals = runtimes.map((r) => (speed ? r.medianRtf : r.peakMemoryBytes));
+  // Out-of-process engines (Apple) are not comparable on speed/memory; show only in-process ones.
+  const shown = runtimes.filter((r) => !r.accuracyOnly);
+  const vals = shown.map((r) => (speed ? r.medianRtf : r.peakMemoryBytes));
   const max = Math.max(...vals, speed ? 0.001 : 1);
-  const lines = runtimes.map((r, i) =>
+  const lines = shown.map((r, i) =>
     barLine(r, speed ? rtf(r.medianRtf) : mb(r.peakMemoryBytes), kind, vals[i] / max)).join('');
   card.innerHTML = `<div class="chart-head"><h3>${speed ? 'Real-time factor' : 'Peak memory'}</h3>
     <span class="hint">${speed ? 'lower is faster' : 'lower is leaner'}</span></div>${lines}`;
-  const nonReal = runtimes.filter((r) => !isReal(r));
+  const nonReal = shown.filter((r) => !isReal(r));
   if (nonReal.length) {
     const where = [...new Set(nonReal.map((r) => PROV_LABEL[r.provenance]))].join(' / ');
     const plats = [...new Set(nonReal.map((r) => r.platform))].join(' & ');

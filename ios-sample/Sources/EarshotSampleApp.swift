@@ -13,6 +13,12 @@ struct EarshotSampleApp: App {
             Task { await BenchRunner.run() }
             return
         }
+        // Benchmark mode for Apple's built-in on-device recognizer, for an accuracy comparison
+        // against WhisperKit on the same device and clips.
+        if CommandLine.arguments.contains("--earshot-bench-apple") {
+            Task { await AppleSpeechBench.run() }
+            return
+        }
         // Register the Swift WhisperKit backend with the shared seam, once, at launch.
         NativeTranscriptionProviderHolder.shared.implementation = WhisperKitTranscriptionProvider()
     }

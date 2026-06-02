@@ -34,6 +34,10 @@ data class RawRun(
     val osVersion: String,
     val loadMs: Long,           // cold model load time
     val peakMemoryBytes: Long,  // peak process memory observed during the run
+    // True for engines that run out-of-process (e.g. Apple's system speech daemon), where our
+    // in-process memory probe and timings are not comparable. Such runs are scored on accuracy
+    // (WER) only and omitted from the speed and memory charts.
+    val accuracyOnly: Boolean = false,
     val clips: List<RawClip>,
 )
 
@@ -63,6 +67,7 @@ data class RuntimeSummary(
     val device: String,
     val provenance: String,
     val osVersion: String,
+    val accuracyOnly: Boolean,
     val werPercent: Double,
     val substitutions: Int,
     val deletions: Int,

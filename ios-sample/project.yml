@@ -43,6 +43,9 @@ targets:
         # On-device models + standard HTTPS only, so the app qualifies for the
         # encryption exemption.
         ITSAppUsesNonExemptEncryption: false
+        # Used only by the --earshot-bench-apple accuracy comparison against Apple's
+        # on-device recognizer; the normal demo does not use speech recognition.
+        NSSpeechRecognitionUsageDescription: "Earshot benchmarks Apple's on-device speech recognizer against WhisperKit on the same clips."
         UILaunchScreen: {}
     settings:
       base:

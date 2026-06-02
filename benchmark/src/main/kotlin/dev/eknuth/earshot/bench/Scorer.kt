@@ -87,6 +87,7 @@ private fun scoreRun(raw: RawRun, refById: Map<String, ManifestClip>): RuntimeSu
         device = raw.device,
         provenance = raw.provenance,
         osVersion = raw.osVersion,
+        accuracyOnly = raw.accuracyOnly,
         werPercent = aggregate.rate * 100,
         substitutions = aggregate.substitutions,
         deletions = aggregate.deletions,
