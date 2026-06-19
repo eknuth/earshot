@@ -23,8 +23,8 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "Earshot",
-            url: "https://github.com/eknuth/earshot/releases/download/v0.1.0/Earshot.xcframework.zip",
-            checksum: "66e76b5604a3071baff107da7351657d70de0a0710cac644f4a34725ed5954e4"
+            url: "https://github.com/eknuth/earshot/releases/download/v0.2.0/Earshot.xcframework.zip",
+            checksum: "e87f5db90a5715698a41f2f19a7fb4842858e82c8bd0694e5c0773f16e6f3d65"
         )
     ]
 )
