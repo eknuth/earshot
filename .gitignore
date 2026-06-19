@@ -46,6 +46,7 @@ secring.gpg
 # Vendored sherpa-onnx xcframeworks (large; download per benchmark/README.md)
 ios-sample/Vendor/
 ios-sample/parakeet/
+ios-sample/nemotron/
 
 # Vendored sherpa-onnx Android native libs (large; download per benchmark/README.md)
 sample-android/src/main/jniLibs/

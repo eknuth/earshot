@@ -174,17 +174,30 @@ object SherpaModels {
         backend = AsrBackend.SHERPA_TRANSDUCER,
     )
 
-    // NVIDIA Nemotron-Speech-Streaming-En-0.6b. The on-device artifact path is still
-    // being settled (the Microsoft ONNX port is wrapped in Foundry-Local's pipeline and
-    // has no mobile bindings yet); populated once a sherpa-loadable export exists.
-    // Placeholder kept so the backend type and selection plumbing are testable today.
+    // sherpa-onnx export of NVIDIA Nemotron-Speech-Streaming-En-0.6b, int8 quantized.
+    // This is a cache-aware streaming FastConformer + RNNT, so it runs through sherpa's
+    // OnlineRecognizer/OnlineStream (not the offline path Parakeet uses). The streaming
+    // export comes in chunk-size variants (80/160/560/1120ms); the 1120ms chunk is the
+    // primary here for the best WER and a fair head-to-head against the offline models.
+    // Distributed by k2-fsa as a single tar.bz2 on the asr-models release; the host app
+    // stages encoder/decoder/joiner + tokens.txt into the model dir. Same filename layout
+    // as Parakeet (encoder.int8.onnx / decoder.int8.onnx / joiner.int8.onnx / tokens.txt).
+    // https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-nemotron-speech-streaming-en-0.6b-1120ms-int8-2026-04-25.tar.bz2
+    private const val NEMOTRON_BASE =
+        "https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-nemotron-speech-streaming-en-0.6b-1120ms-int8-2026-04-25"
+
     val NEMOTRON_STREAMING_EN_0_6B = ModelInfo(
         name = "nemotron-speech-streaming-en-0.6b",
-        version = "0.0",
-        sizeBytes = 700_000_000L,
-        downloadUrl = "",
+        version = "2026-04-25",
+        sizeBytes = 632_000_000L,  // encoder 622.7M + decoder 6.9M + joiner 1.7M + tokens
+        downloadUrl = "$NEMOTRON_BASE.tar.bz2",
         checksum = null,
-        files = emptyList(),
+        files = listOf(
+            ModelFileInfo("encoder.int8.onnx", "$NEMOTRON_BASE.tar.bz2", 622_700_000L),
+            ModelFileInfo("decoder.int8.onnx", "$NEMOTRON_BASE.tar.bz2", 6_900_000L),
+            ModelFileInfo("joiner.int8.onnx", "$NEMOTRON_BASE.tar.bz2", 1_700_000L),
+            ModelFileInfo("tokens.txt", "$NEMOTRON_BASE.tar.bz2", 8_700L),
+        ),
         backend = AsrBackend.SHERPA_STREAMING,
     )
 }

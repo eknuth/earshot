@@ -26,7 +26,8 @@ Results are rendered at <https://eknuth.github.io/earshot/benchmarks.html>.
 | `src/main/kotlin/.../Scorer.kt` | Merges each runner's raw transcripts against the references and writes `results.json`. |
 | `src/test/kotlin/.../WerTest.kt` | WER unit tests (`./gradlew :benchmark:test`). |
 | `raw-android.json`, `raw-ios.json` | The raw Whisper on-device captures that produced the published results. |
-| `raw-parakeet-android.json`, `raw-parakeet-ios.json` | The raw Parakeet (sherpa-onnx) captures, once run on-device. |
+| `raw-parakeet-android.json`, `raw-parakeet-ios.json` | The raw Parakeet (sherpa-onnx, offline) captures, once run on-device. |
+| `raw-nemotron-android.json`, `raw-nemotron-ios.json` | The raw Nemotron-Speech-Streaming (sherpa-onnx, streaming) captures, once run on-device. |
 
 Each on-device runner only records raw hypotheses plus load time, per-clip processing time and
 peak memory. Scoring happens here, once, so both runtimes are judged by identical math. Accuracy
@@ -99,13 +100,45 @@ adb pull "$(dirname $M)/../raw-parakeet-android.json" benchmark/ 2>/dev/null || 
 model directory as a folder reference named `parakeet`, then launch with
 `--earshot-bench-parakeet` and copy `Documents/raw-parakeet-ios.json` out of the app container.
 
-**Re-score with all four raw files:**
+## Nemotron streaming (sherpa-onnx) reproduction
+
+Nemotron-Speech-Streaming-En-0.6b is the streaming sibling of Parakeet: a cache-aware
+FastConformer + RNNT, so it runs through sherpa's `OnlineRecognizer`/`OnlineStream` rather
+than the offline recognizer. The benchmarked export is the 1120ms-chunk int8 variant
+(best accuracy of the chunk sizes). Setup mirrors Parakeet; the native libraries are shared.
+
+**Android.** Reuse the same jniLibs, then stage the streaming model and run the Nemotron test:
 
 ```sh
-./gradlew :benchmark:run --args="--manifest benchmark/fixtures/manifest.json \
-  --raw benchmark/raw-android.json --raw benchmark/raw-ios.json \
-  --raw benchmark/raw-parakeet-android.json --raw benchmark/raw-parakeet-ios.json \
-  --out docs/benchmarks/results.json"
+wget https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-nemotron-speech-streaming-en-0.6b-1120ms-int8-2026-04-25.tar.bz2
+tar xf sherpa-onnx-nemotron-speech-streaming-en-0.6b-1120ms-int8-2026-04-25.tar.bz2
+M=/sdcard/Android/data/dev.eknuth.earshot.sample/files/models/nemotron-speech-streaming-en-0.6b
+adb shell mkdir -p "$M"
+adb push sherpa-onnx-nemotron-speech-streaming-en-0.6b-1120ms-int8-2026-04-25/{encoder.int8.onnx,decoder.int8.onnx,joiner.int8.onnx,tokens.txt} "$M"/
+
+./gradlew :sample-android:assembleDebug :sample-android:assembleDebugAndroidTest
+adb install -r -g sample-android/build/outputs/apk/debug/*.apk
+adb install -r -g sample-android/build/outputs/apk/androidTest/debug/*.apk
+adb shell am instrument -w -e class dev.eknuth.earshot.sample.NemotronBenchmarkRunnerTest \
+  dev.eknuth.earshot.sample.test/androidx.test.runner.AndroidJUnitRunner
+adb pull "$(dirname $M)/../raw-nemotron-android.json" benchmark/ 2>/dev/null || \
+  adb exec-out run-as dev.eknuth.earshot.sample cat files/raw-nemotron-android.json > benchmark/raw-nemotron-android.json
+```
+
+**iOS.** Same sherpa-onnx package/helper/bridging header as Parakeet (the online classes are
+already in `SherpaOnnx.swift`). Add the extracted model directory as a folder reference named
+`nemotron`, then launch with `--earshot-bench-nemotron` and copy `Documents/raw-nemotron-ios.json`
+out of the app container.
+
+**Re-score with all raw files (use absolute paths; the Gradle working dir is the module dir):**
+
+```sh
+R="$PWD/benchmark"
+./gradlew :benchmark:run --args="--manifest $R/fixtures/manifest.json \
+  --raw $R/raw-android.json --raw $R/raw-ios.json --raw $R/raw-apple.json \
+  --raw $R/raw-parakeet-android.json --raw $R/raw-parakeet-ios.json \
+  --raw $R/raw-nemotron-android.json --raw $R/raw-nemotron-ios.json \
+  --out $PWD/docs/benchmarks/results.json"
 ```
 
 This module is a developer tool. It is not part of the published Earshot library.

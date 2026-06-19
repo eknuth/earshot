@@ -144,6 +144,13 @@ because a transducer runs in one pass rather than Whisper's beam search. The cos
 about 1.17GB peak versus 241MB. That trade, far more accurate against far heavier, is the
 kind of thing this harness exists to measure on hardware you own, not on a datacenter GPU.
 
+Earshot also runs NVIDIA Nemotron-Speech-Streaming-En-0.6b, the streaming sibling of
+Parakeet. It is a cache-aware streaming model (the benchmarked export uses a 1120ms chunk),
+so it runs through sherpa's online recognizer rather than the offline one. On the iPad it
+scores 13.77% word error at about 0.11x real time with a 720MB peak. Streaming buys
+incremental, low-latency output as audio arrives, and the accuracy gap against the offline
+Parakeet is the price of decoding in chunks rather than seeing the whole clip at once.
+
 Word error rate is scored offline by one algorithm over identical references, so the
 runtimes are comparable by construction. The harness, per-clip results, speed and memory
 are in [`benchmark/`](benchmark) and rendered at

@@ -25,6 +25,12 @@ struct EarshotSampleApp: App {
             Task { await ParakeetBenchRunner.run() }
             return
         }
+        // Benchmark mode for NVIDIA Nemotron-Speech-Streaming via sherpa-onnx (the streaming
+        // recognizer), the same model that runs on Android, for a cross-runtime comparison.
+        if CommandLine.arguments.contains("--earshot-bench-nemotron") {
+            Task { await NemotronBenchRunner.run() }
+            return
+        }
         // Register the Swift WhisperKit backend with the shared seam, once, at launch.
         NativeTranscriptionProviderHolder.shared.implementation = WhisperKitTranscriptionProvider()
     }

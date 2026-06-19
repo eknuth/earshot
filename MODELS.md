@@ -24,7 +24,11 @@ is supplied by the host app rather than bundled in the published library, the sa
 the iOS WhisperKit runtime is, so the published artifact stays free of a second,
 conflicting `libonnxruntime.so`. The model definitions and the backend seam live in
 `SherpaModels` / `NativeAsrProvider` (`ModelDownloader.kt`, `TranscriptionEngine.kt`);
-the reference runtime wiring is in the sample apps. The on-device Nemotron artifact path
-is still being settled (the Microsoft ONNX port is wrapped in Foundry-Local's pipeline
-with no mobile bindings yet), so its definition is a placeholder until a sherpa-loadable
-export exists.
+the reference runtime wiring is in the sample apps.
+
+Parakeet-TDT-0.6b-v3 is an offline transducer run through sherpa's `OfflineRecognizer`.
+Nemotron-Speech-Streaming-En-0.6b is a cache-aware streaming FastConformer + RNNT, so it
+runs through sherpa's `OnlineRecognizer`/`OnlineStream` instead; Earshot routes it through
+the `SHERPA_STREAMING` backend. The benchmarked Nemotron export is the 1120ms-chunk int8
+variant from the sherpa-onnx asr-models release, which gives the best accuracy of the
+chunk sizes while still being the streaming model.

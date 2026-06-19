@@ -17,6 +17,15 @@ const mb = (b) => `${Math.round(b / 1048576)} MB`;
 const secs = (ms) => (ms >= 1000 ? `${(ms / 1000).toFixed(1)} s` : `${ms} ms`);
 const platKey = (r) => (r.platform.toLowerCase().includes('android') ? 'android' : 'ios');
 const isReal = (r) => r.provenance === 'real-device';
+// A short model tag for the bar-chart labels, so two sherpa-onnx rows on the same platform
+// (Parakeet offline vs Nemotron streaming) stay distinguishable. The full model name is in
+// the comparison table.
+const modelTag = (r) => {
+  const m = r.model.toLowerCase();
+  if (m.includes('nemotron')) return 'Nemotron';
+  if (m.includes('parakeet')) return 'Parakeet';
+  return null;
+};
 
 const PROV_LABEL = { 'real-device': 'real device', simulator: 'simulator', emulator: 'emulator' };
 function provBadge(p) {
@@ -130,8 +139,10 @@ function comparisonBlock(runtimes) {
 function barLine(r, value, label, scale) {
   const k = r.accuracyOnly ? 'apple' : platKey(r);
   const unrep = (label !== 'wer' && !isReal(r)) ? ' unrep' : '';
+  const tag = modelTag(r);
+  const suffix = tag ? ` · ${tag}` : '';
   return `<div class="bar-item">
-      <div class="blabel"><b>${r.platform}</b> · ${r.runtime}</div>
+      <div class="blabel"><b>${r.platform}</b> · ${r.runtime}${suffix}</div>
       <div class="bar-line">
         <span class="bar-track"><span class="bar-fill ${k}${unrep}" data-scale="${scale.toFixed(3)}"></span></span>
         <span class="bval">${value}</span>
@@ -147,7 +158,7 @@ function werChart(runtimes) {
   const card = $('div', 'chart-card');
   const max = Math.max(...runtimes.map((r) => r.werPercent), 0.001);
   const lines = runtimes.map((r) => barLine(r, pct(r.werPercent), 'wer', r.werPercent / max)).join('');
-  const foot = `Two model families on the same clips: Whisper <code style="color:var(--amber)">tiny.en</code> (39M) and NVIDIA <code style="color:var(--amber)">Parakeet-TDT v3</code> (600M, via sherpa-onnx). Apple's built-in recognizer is shown for reference. Parakeet is far more accurate; its speed and memory cost show up in the charts below. Bars scaled to the highest value shown.`;
+  const foot = `Three NVIDIA model variants on the same clips alongside Whisper <code style="color:var(--amber)">tiny.en</code> (39M): <code style="color:var(--amber)">Parakeet-TDT v3</code> (600M, offline) and <code style="color:var(--amber)">Nemotron Speech Streaming</code> (600M, cache-aware streaming, 1120ms chunk), both via sherpa-onnx. Apple's built-in recognizer is shown for reference. The streaming Nemotron trades accuracy for its 1120ms-chunk latency; Parakeet is the most accurate. Speed and memory show up in the charts below. Bars scaled to the highest value shown.`;
   card.innerHTML = `<div class="chart-head"><h3>Accuracy</h3><span class="hint">lower is better</span></div>${lines}
     <p class="chart-foot">${foot}</p>`;
   block.appendChild(card);

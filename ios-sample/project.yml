@@ -38,6 +38,10 @@ targets:
       # Folder reference named "parakeet"; used only by --earshot-bench-parakeet. Not in git.
       - path: parakeet
         type: folder
+      # Nemotron-Speech-Streaming model files (encoder/decoder/joiner + tokens) for sherpa-onnx.
+      # Folder reference named "nemotron"; used only by --earshot-bench-nemotron. Not in git.
+      - path: nemotron
+        type: folder
     info:
       path: Sources/Info.plist
       properties:
