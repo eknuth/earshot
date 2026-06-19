@@ -147,10 +147,7 @@ function werChart(runtimes) {
   const card = $('div', 'chart-card');
   const max = Math.max(...runtimes.map((r) => r.werPercent), 0.001);
   const lines = runtimes.map((r) => barLine(r, pct(r.werPercent), 'wer', r.werPercent / max)).join('');
-  const hasApple = runtimes.some((r) => r.accuracyOnly);
-  const foot = hasApple
-    ? `Earshot runs Whisper <code style="color:var(--amber)">tiny.en</code> on both platforms; Apple's built-in on-device recognizer is shown for comparison, on the same clips. Bars scaled to the highest value shown.`
-    : `Bars scaled to the highest value shown. Both runtimes run Whisper <code style="color:var(--amber)">tiny.en</code>; the spread is the runtime and quantization, not the model.`;
+  const foot = `Two model families on the same clips: Whisper <code style="color:var(--amber)">tiny.en</code> (39M) and NVIDIA <code style="color:var(--amber)">Parakeet-TDT v3</code> (600M, via sherpa-onnx). Apple's built-in recognizer is shown for reference. Parakeet is far more accurate; its speed and memory cost show up in the charts below. Bars scaled to the highest value shown.`;
   card.innerHTML = `<div class="chart-head"><h3>Accuracy</h3><span class="hint">lower is better</span></div>${lines}
     <p class="chart-foot">${foot}</p>`;
   block.appendChild(card);

@@ -135,8 +135,14 @@ The point of on-device is that you can prove it works where it runs, so this lib
 exists to be measured, and the numbers come from real hardware. Scored on 25 LibriSpeech
 clips, Whisper tiny.en lands at 8.38% word error on an iPad's Neural Engine (WhisperKit /
 CoreML) and 8.98% on a Pixel 9a (ONNX Runtime). On the iPad it transcribes at about 0.02x
-real time, roughly a minute of speech a second. The two runtimes differ on accuracy
-because of precision, float16 on CoreML versus int8 on ONNX, not the model.
+real time, roughly a minute of speech a second.
+
+For a model that shares one runtime across both platforms, Earshot also runs NVIDIA
+Parakeet-TDT-0.6b-v3 (600M params) through sherpa-onnx. On the same Pixel 9a it cuts word
+error to 2.59%, more than a 3x improvement over Whisper tiny.en, and decodes faster per clip
+because a transducer runs in one pass rather than Whisper's beam search. The cost is memory:
+about 1.17GB peak versus 241MB. That trade, far more accurate against far heavier, is the
+kind of thing this harness exists to measure on hardware you own, not on a datacenter GPU.
 
 Word error rate is scored offline by one algorithm over identical references, so the
 runtimes are comparable by construction. The harness, per-clip results, speed and memory

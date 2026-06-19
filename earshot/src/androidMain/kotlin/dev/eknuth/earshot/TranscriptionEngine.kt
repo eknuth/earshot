@@ -17,6 +17,41 @@ import java.nio.FloatBuffer
 import java.nio.IntBuffer
 
 /**
+ * Provider seam for native ASR runtimes the published library does not bundle.
+ *
+ * Whisper runs in-process on the ONNX Runtime dependency the library already declares.
+ * The NVIDIA models run through sherpa-onnx, which ships its own ONNX Runtime `.so` and
+ * Kotlin API; bundling that into the published artifact would clash with the existing
+ * `onnxruntime-android` native lib. So the host app provides the sherpa implementation
+ * and registers it here, mirroring how iOS registers its WhisperKit provider.
+ */
+interface NativeAsrProvider {
+    /**
+     * Load the model whose files live under [modelDir] (encoder/decoder/joiner + tokens
+     * for a transducer). Returns true once the recognizer is ready.
+     */
+    suspend fun loadModel(modelDir: String): Boolean
+
+    /** Transcribe a 16kHz mono WAV at [audioPath]; throws on failure. */
+    suspend fun transcribe(audioPath: String): String
+
+    /** True once the recognizer is loaded and ready. */
+    fun isReady(): Boolean
+
+    /** Release the native recognizer. */
+    fun release()
+}
+
+/**
+ * Settable singleton holder for the [NativeAsrProvider]. The host app sets
+ * [implementation] once (see the sample app's sherpa wiring) when it intends to run a
+ * sherpa-backed model.
+ */
+object NativeAsrProviderHolder {
+    var implementation: NativeAsrProvider? = null
+}
+
+/**
  * Android implementation of TranscriptionEngine using Microsoft Olive-generated Whisper model.
  *
  * This implementation uses a single combined ONNX model that handles:
@@ -29,6 +64,13 @@ import java.nio.IntBuffer
  * Output: Transcribed text directly
  *
  * Model source: https://github.com/microsoft/onnxruntime-inference-examples/tree/main/mobile/examples/whisper/local/android
+ *
+ * For non-Whisper models (NVIDIA Parakeet / Nemotron, [AsrBackend.SHERPA_TRANSDUCER]
+ * and [AsrBackend.SHERPA_STREAMING]) the engine delegates to an app-registered
+ * [NativeAsrProvider]. sherpa-onnx ships its own ONNX Runtime and Kotlin API, so it is
+ * supplied by the host app rather than bundled in the published library, the same way
+ * the iOS WhisperKit runtime is. This keeps the published artifact free of a second,
+ * conflicting `libonnxruntime.so`.
  */
 actual class TranscriptionEngine {
 
@@ -46,6 +88,13 @@ actual class TranscriptionEngine {
     private var config: TranscriptionConfig = TranscriptionConfig()
     private val mutex = Mutex()
 
+    // Which backend the configured model maps to. Resolved in initialize(); defaults to
+    // the Whisper Olive path so an unknown/unset model name behaves as it always did.
+    private var backend: AsrBackend = AsrBackend.WHISPER_OLIVE
+
+    private val provider: NativeAsrProvider?
+        get() = NativeAsrProviderHolder.implementation
+
     @Volatile
     private var modelStatus: ModelStatus = ModelStatus.NotDownloaded
 
@@ -54,6 +103,35 @@ actual class TranscriptionEngine {
 
     actual suspend fun initialize(config: TranscriptionConfig): Boolean = mutex.withLock {
         this.config = config
+        this.backend = Models.backendFor(config.modelName)
+
+        // Non-Whisper models run through the app-registered sherpa provider.
+        if (backend != AsrBackend.WHISPER_OLIVE) {
+            val p = provider
+            if (p == null) {
+                Log.e(TAG, "No NativeAsrProvider registered for backend $backend")
+                modelStatus = ModelStatus.Error("No sherpa provider registered")
+                isInitialized = false
+                return@withLock false
+            }
+            val dir = modelPath
+            if (dir == null || !File(dir).exists()) {
+                Log.e(TAG, "Model path not set or doesn't exist: $dir")
+                modelStatus = ModelStatus.NotDownloaded
+                return@withLock false
+            }
+            return@withLock try {
+                val ok = p.loadModel(dir)
+                isInitialized = ok
+                modelStatus = if (ok) ModelStatus.Ready else ModelStatus.Error("Provider failed to load model")
+                ok
+            } catch (e: Throwable) {
+                Log.e(TAG, "Sherpa provider failed to load model", e)
+                modelStatus = ModelStatus.Error("Failed to load: ${e.message}")
+                isInitialized = false
+                false
+            }
+        }
 
         return@withLock withContext(Dispatchers.IO) {
             try {
@@ -122,7 +200,27 @@ actual class TranscriptionEngine {
         }
     }
 
-    actual suspend fun transcribe(audioPath: String): TranscriptionEngineResult =
+    actual suspend fun transcribe(audioPath: String): TranscriptionEngineResult {
+        if (backend != AsrBackend.WHISPER_OLIVE) {
+            val p = provider
+                ?: return TranscriptionEngineResult.Error("No sherpa provider registered")
+            val start = System.currentTimeMillis()
+            return try {
+                val text = p.transcribe(audioPath)
+                TranscriptionEngineResult.Success(
+                    text = text,
+                    language = config.language,
+                    confidence = null,
+                    processingTimeMs = System.currentTimeMillis() - start
+                )
+            } catch (e: Throwable) {
+                TranscriptionEngineResult.Error("Transcription failed: ${e.message}", e)
+            }
+        }
+        return transcribeWhisper(audioPath)
+    }
+
+    private suspend fun transcribeWhisper(audioPath: String): TranscriptionEngineResult =
         withContext(Dispatchers.Default) {
             val startTime = System.currentTimeMillis()
 
@@ -258,23 +356,25 @@ actual class TranscriptionEngine {
             }
         }
 
-    actual fun isReady(): Boolean = isInitialized && session != null
+    actual fun isReady(): Boolean =
+        if (backend != AsrBackend.WHISPER_OLIVE) isInitialized && (provider?.isReady() ?: false)
+        else isInitialized && session != null
 
     actual fun getModelStatus(): ModelStatus = modelStatus
 
     actual suspend fun ensureModelDownloaded(): Boolean = mutex.withLock {
         val path = modelPath
-        if (path != null && File(path).exists()) {
-            val modelFile = File(path, "model.onnx")
-            if (modelFile.exists()) {
-                modelStatus = ModelStatus.Ready
-                return@withLock true
-            }
+        if (path != null && File(path).exists() && modelFilePresent(path)) {
+            modelStatus = ModelStatus.Ready
+            return@withLock true
         }
         return@withLock false
     }
 
     actual fun release() {
+        if (backend != AsrBackend.WHISPER_OLIVE) {
+            provider?.release()
+        }
         session?.close()
         session = null
         ortEnvironment?.close()
@@ -289,13 +389,18 @@ actual class TranscriptionEngine {
      */
     fun setModelPath(path: String) {
         modelPath = path
-        if (File(path).exists()) {
-            val modelFile = File(path, "model.onnx")
-            if (modelFile.exists()) {
-                modelStatus = ModelStatus.Ready
-            }
+        if (File(path).exists() && modelFilePresent(path)) {
+            modelStatus = ModelStatus.Ready
         }
     }
+
+    /**
+     * Whether the expected primary model file is staged under [dir]. The Whisper Olive
+     * path needs `model.onnx`; a sherpa transducer needs its encoder. setModelPath runs
+     * before a model is selected, so we accept either layout.
+     */
+    private fun modelFilePresent(dir: String): Boolean =
+        File(dir, "model.onnx").exists() || File(dir, "encoder.int8.onnx").exists()
 
     /**
      * Update download progress. Called by ModelDownloader during download.

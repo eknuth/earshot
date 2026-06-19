@@ -5,6 +5,9 @@ build/
 **/build/
 local.properties
 
+# SwiftPM build artifacts
+.build/
+
 # Downloaded model artifacts (fetched on-device at runtime, never committed)
 *.onnx
 *.mlmodelc/
@@ -39,3 +42,10 @@ secring.gpg
 
 # Release build artifacts (attached to GitHub releases, not committed)
 *.xcframework.zip
+
+# Vendored sherpa-onnx xcframeworks (large; download per benchmark/README.md)
+ios-sample/Vendor/
+ios-sample/parakeet/
+
+# Vendored sherpa-onnx Android native libs (large; download per benchmark/README.md)
+sample-android/src/main/jniLibs/

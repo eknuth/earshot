@@ -663,6 +663,446 @@
                     "referenceWords": 5
                 }
             ]
+        },
+        {
+            "runtime": "sherpa-onnx",
+            "platform": "Android",
+            "model": "parakeet-tdt-0.6b-v3 (int8)",
+            "device": "Pixel 9a",
+            "provenance": "real-device",
+            "osVersion": "Android 16 (API 36)",
+            "accuracyOnly": false,
+            "werPercent": 2.5948103792415167,
+            "substitutions": 11,
+            "deletions": 2,
+            "insertions": 0,
+            "referenceWords": 501,
+            "loadMs": 7967,
+            "peakMemoryBytes": 1166839808,
+            "medianRtf": 0.12234042553191489,
+            "meanRtf": 0.12344194698846858,
+            "clips": [
+                {
+                    "id": "1272-128104-0000",
+                    "werPercent": 0.0,
+                    "rtf": 0.13919726729291204,
+                    "processingMs": 815,
+                    "audioMs": 5855,
+                    "referenceWords": 17
+                },
+                {
+                    "id": "1272-128104-0001",
+                    "werPercent": 0.0,
+                    "rtf": 0.12710280373831775,
+                    "processingMs": 612,
+                    "audioMs": 4815,
+                    "referenceWords": 10
+                },
+                {
+                    "id": "1272-128104-0002",
+                    "werPercent": 0.0,
+                    "rtf": 0.12158590308370044,
+                    "processingMs": 1518,
+                    "audioMs": 12485,
+                    "referenceWords": 32
+                },
+                {
+                    "id": "1272-128104-0003",
+                    "werPercent": 0.0,
+                    "rtf": 0.11717171717171718,
+                    "processingMs": 1160,
+                    "audioMs": 9900,
+                    "referenceWords": 24
+                },
+                {
+                    "id": "1272-128104-0004",
+                    "werPercent": 5.88235294117647,
+                    "rtf": 0.11591836734693878,
+                    "processingMs": 3408,
+                    "audioMs": 29400,
+                    "referenceWords": 68
+                },
+                {
+                    "id": "1272-128104-0005",
+                    "werPercent": 0.0,
+                    "rtf": 0.12863485016648168,
+                    "processingMs": 1159,
+                    "audioMs": 9010,
+                    "referenceWords": 18
+                },
+                {
+                    "id": "1272-128104-0006",
+                    "werPercent": 0.0,
+                    "rtf": 0.12234042553191489,
+                    "processingMs": 690,
+                    "audioMs": 5640,
+                    "referenceWords": 12
+                },
+                {
+                    "id": "1272-128104-0007",
+                    "werPercent": 0.0,
+                    "rtf": 0.11547619047619048,
+                    "processingMs": 1067,
+                    "audioMs": 9240,
+                    "referenceWords": 19
+                },
+                {
+                    "id": "1272-128104-0008",
+                    "werPercent": 0.0,
+                    "rtf": 0.1173828125,
+                    "processingMs": 601,
+                    "audioMs": 5120,
+                    "referenceWords": 11
+                },
+                {
+                    "id": "1272-128104-0009",
+                    "werPercent": 6.976744186046512,
+                    "rtf": 0.11088026243849097,
+                    "processingMs": 2028,
+                    "audioMs": 18290,
+                    "referenceWords": 43
+                },
+                {
+                    "id": "1272-128104-0010",
+                    "werPercent": 6.666666666666667,
+                    "rtf": 0.12714285714285714,
+                    "processingMs": 712,
+                    "audioMs": 5600,
+                    "referenceWords": 15
+                },
+                {
+                    "id": "1272-128104-0011",
+                    "werPercent": 5.88235294117647,
+                    "rtf": 0.10658286470393649,
+                    "processingMs": 1611,
+                    "audioMs": 15115,
+                    "referenceWords": 34
+                },
+                {
+                    "id": "1272-128104-0012",
+                    "werPercent": 0.0,
+                    "rtf": 0.11617100371747212,
+                    "processingMs": 625,
+                    "audioMs": 5380,
+                    "referenceWords": 9
+                },
+                {
+                    "id": "1272-128104-0013",
+                    "werPercent": 0.0,
+                    "rtf": 0.11676056338028169,
+                    "processingMs": 829,
+                    "audioMs": 7100,
+                    "referenceWords": 18
+                },
+                {
+                    "id": "1272-128104-0014",
+                    "werPercent": 0.0,
+                    "rtf": 0.14342984409799556,
+                    "processingMs": 322,
+                    "audioMs": 2245,
+                    "referenceWords": 5
+                },
+                {
+                    "id": "1272-135031-0000",
+                    "werPercent": 3.8461538461538463,
+                    "rtf": 0.1116214974735875,
+                    "processingMs": 1215,
+                    "audioMs": 10885,
+                    "referenceWords": 26
+                },
+                {
+                    "id": "1272-135031-0001",
+                    "werPercent": 0.0,
+                    "rtf": 0.11599281221922732,
+                    "processingMs": 1291,
+                    "audioMs": 11130,
+                    "referenceWords": 28
+                },
+                {
+                    "id": "1272-135031-0002",
+                    "werPercent": 0.0,
+                    "rtf": 0.11041394335511982,
+                    "processingMs": 1267,
+                    "audioMs": 11475,
+                    "referenceWords": 31
+                },
+                {
+                    "id": "1272-135031-0003",
+                    "werPercent": 0.0,
+                    "rtf": 0.12302839116719243,
+                    "processingMs": 585,
+                    "audioMs": 4755,
+                    "referenceWords": 15
+                },
+                {
+                    "id": "1272-135031-0004",
+                    "werPercent": 7.6923076923076925,
+                    "rtf": 0.13136094674556212,
+                    "processingMs": 555,
+                    "audioMs": 4225,
+                    "referenceWords": 13
+                },
+                {
+                    "id": "1272-135031-0005",
+                    "werPercent": 6.666666666666667,
+                    "rtf": 0.1295135135135135,
+                    "processingMs": 599,
+                    "audioMs": 4625,
+                    "referenceWords": 15
+                },
+                {
+                    "id": "1272-135031-0006",
+                    "werPercent": 0.0,
+                    "rtf": 0.13031784841075794,
+                    "processingMs": 533,
+                    "audioMs": 4090,
+                    "referenceWords": 14
+                },
+                {
+                    "id": "1272-135031-0007",
+                    "werPercent": 0.0,
+                    "rtf": 0.13394178589047853,
+                    "processingMs": 543,
+                    "audioMs": 4054,
+                    "referenceWords": 10
+                },
+                {
+                    "id": "1272-135031-0008",
+                    "werPercent": 0.0,
+                    "rtf": 0.1332425068119891,
+                    "processingMs": 489,
+                    "audioMs": 3670,
+                    "referenceWords": 9
+                },
+                {
+                    "id": "1272-135031-0009",
+                    "werPercent": 0.0,
+                    "rtf": 0.14083769633507853,
+                    "processingMs": 269,
+                    "audioMs": 1910,
+                    "referenceWords": 5
+                }
+            ]
+        },
+        {
+            "runtime": "sherpa-onnx",
+            "platform": "iOS",
+            "model": "parakeet-tdt-0.6b-v3 (int8)",
+            "device": "iPad",
+            "provenance": "real-device",
+            "osVersion": "iOS 26.5",
+            "accuracyOnly": false,
+            "werPercent": 2.7944111776447107,
+            "substitutions": 12,
+            "deletions": 2,
+            "insertions": 0,
+            "referenceWords": 501,
+            "loadMs": 5016,
+            "peakMemoryBytes": 907266384,
+            "medianRtf": 0.05319246669728985,
+            "meanRtf": 0.054770009133924026,
+            "clips": [
+                {
+                    "id": "1272-128104-0000",
+                    "werPercent": 0.0,
+                    "rtf": 0.07839453458582409,
+                    "processingMs": 459,
+                    "audioMs": 5855,
+                    "referenceWords": 17
+                },
+                {
+                    "id": "1272-128104-0001",
+                    "werPercent": 0.0,
+                    "rtf": 0.0446521287642783,
+                    "processingMs": 215,
+                    "audioMs": 4815,
+                    "referenceWords": 10
+                },
+                {
+                    "id": "1272-128104-0002",
+                    "werPercent": 0.0,
+                    "rtf": 0.04453344012815379,
+                    "processingMs": 556,
+                    "audioMs": 12485,
+                    "referenceWords": 32
+                },
+                {
+                    "id": "1272-128104-0003",
+                    "werPercent": 0.0,
+                    "rtf": 0.04494949494949495,
+                    "processingMs": 445,
+                    "audioMs": 9900,
+                    "referenceWords": 24
+                },
+                {
+                    "id": "1272-128104-0004",
+                    "werPercent": 7.352941176470589,
+                    "rtf": 0.05227891156462585,
+                    "processingMs": 1537,
+                    "audioMs": 29400,
+                    "referenceWords": 68
+                },
+                {
+                    "id": "1272-128104-0005",
+                    "werPercent": 0.0,
+                    "rtf": 0.05216426193118757,
+                    "processingMs": 470,
+                    "audioMs": 9010,
+                    "referenceWords": 18
+                },
+                {
+                    "id": "1272-128104-0006",
+                    "werPercent": 0.0,
+                    "rtf": 0.0549645390070922,
+                    "processingMs": 310,
+                    "audioMs": 5640,
+                    "referenceWords": 12
+                },
+                {
+                    "id": "1272-128104-0007",
+                    "werPercent": 0.0,
+                    "rtf": 0.05357142857142857,
+                    "processingMs": 495,
+                    "audioMs": 9240,
+                    "referenceWords": 19
+                },
+                {
+                    "id": "1272-128104-0008",
+                    "werPercent": 0.0,
+                    "rtf": 0.0513671875,
+                    "processingMs": 263,
+                    "audioMs": 5120,
+                    "referenceWords": 11
+                },
+                {
+                    "id": "1272-128104-0009",
+                    "werPercent": 6.976744186046512,
+                    "rtf": 0.052651722252597045,
+                    "processingMs": 963,
+                    "audioMs": 18290,
+                    "referenceWords": 43
+                },
+                {
+                    "id": "1272-128104-0010",
+                    "werPercent": 6.666666666666667,
+                    "rtf": 0.05267857142857143,
+                    "processingMs": 295,
+                    "audioMs": 5600,
+                    "referenceWords": 15
+                },
+                {
+                    "id": "1272-128104-0011",
+                    "werPercent": 5.88235294117647,
+                    "rtf": 0.05206748263314588,
+                    "processingMs": 787,
+                    "audioMs": 15115,
+                    "referenceWords": 34
+                },
+                {
+                    "id": "1272-128104-0012",
+                    "werPercent": 0.0,
+                    "rtf": 0.05297397769516728,
+                    "processingMs": 285,
+                    "audioMs": 5380,
+                    "referenceWords": 9
+                },
+                {
+                    "id": "1272-128104-0013",
+                    "werPercent": 0.0,
+                    "rtf": 0.05211267605633803,
+                    "processingMs": 370,
+                    "audioMs": 7100,
+                    "referenceWords": 18
+                },
+                {
+                    "id": "1272-128104-0014",
+                    "werPercent": 0.0,
+                    "rtf": 0.06503340757238307,
+                    "processingMs": 146,
+                    "audioMs": 2245,
+                    "referenceWords": 5
+                },
+                {
+                    "id": "1272-135031-0000",
+                    "werPercent": 3.8461538461538463,
+                    "rtf": 0.05319246669728985,
+                    "processingMs": 579,
+                    "audioMs": 10885,
+                    "referenceWords": 26
+                },
+                {
+                    "id": "1272-135031-0001",
+                    "werPercent": 0.0,
+                    "rtf": 0.053728661275831084,
+                    "processingMs": 598,
+                    "audioMs": 11130,
+                    "referenceWords": 28
+                },
+                {
+                    "id": "1272-135031-0002",
+                    "werPercent": 0.0,
+                    "rtf": 0.05211328976034858,
+                    "processingMs": 598,
+                    "audioMs": 11475,
+                    "referenceWords": 31
+                },
+                {
+                    "id": "1272-135031-0003",
+                    "werPercent": 0.0,
+                    "rtf": 0.05573080967402734,
+                    "processingMs": 265,
+                    "audioMs": 4755,
+                    "referenceWords": 15
+                },
+                {
+                    "id": "1272-135031-0004",
+                    "werPercent": 7.6923076923076925,
+                    "rtf": 0.05775147928994083,
+                    "processingMs": 244,
+                    "audioMs": 4225,
+                    "referenceWords": 13
+                },
+                {
+                    "id": "1272-135031-0005",
+                    "werPercent": 6.666666666666667,
+                    "rtf": 0.05621621621621622,
+                    "processingMs": 260,
+                    "audioMs": 4625,
+                    "referenceWords": 15
+                },
+                {
+                    "id": "1272-135031-0006",
+                    "werPercent": 0.0,
+                    "rtf": 0.05672371638141809,
+                    "processingMs": 232,
+                    "audioMs": 4090,
+                    "referenceWords": 14
+                },
+                {
+                    "id": "1272-135031-0007",
+                    "werPercent": 0.0,
+                    "rtf": 0.05673408978786384,
+                    "processingMs": 230,
+                    "audioMs": 4054,
+                    "referenceWords": 10
+                },
+                {
+                    "id": "1272-135031-0008",
+                    "werPercent": 0.0,
+                    "rtf": 0.05722070844686648,
+                    "processingMs": 210,
+                    "audioMs": 3670,
+                    "referenceWords": 9
+                },
+                {
+                    "id": "1272-135031-0009",
+                    "werPercent": 0.0,
+                    "rtf": 0.06544502617801047,
+                    "processingMs": 125,
+                    "audioMs": 1910,
+                    "referenceWords": 5
+                }
+            ]
         }
     ]
 }

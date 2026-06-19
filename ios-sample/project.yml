@@ -34,6 +34,10 @@ targets:
       # fixtures/ structure is preserved in the app bundle. Used only by --earshot-bench.
       - path: fixtures
         type: folder
+      # Parakeet-TDT model files (encoder/decoder/joiner + tokens) for sherpa-onnx.
+      # Folder reference named "parakeet"; used only by --earshot-bench-parakeet. Not in git.
+      - path: parakeet
+        type: folder
     info:
       path: Sources/Info.plist
       properties:
@@ -51,10 +55,12 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: dev.eknuth.earshot.sample
         CODE_SIGN_STYLE: Automatic
-        DEVELOPMENT_TEAM: H7574QMUYG
+        DEVELOPMENT_TEAM: XK3FY8QSZ7
         ENABLE_PREVIEWS: YES
         SWIFT_VERSION: "5.0"
         TARGETED_DEVICE_FAMILY: "1,2"
+        # sherpa-onnx C API is reached through a bridging header (it has no Swift module).
+        SWIFT_OBJC_BRIDGING_HEADER: $(SRCROOT)/Sources/EarshotSample-Bridging-Header.h
     dependencies:
       # Link the KMP framework produced by the pre-build run script below.
       - framework: Earshot.framework
@@ -63,6 +69,15 @@ targets:
         implicit: true
       - package: WhisperKit
         product: WhisperKit
+      # sherpa-onnx runtime for the Parakeet benchmark: static-lib xcframeworks, linked not
+      # embedded. Xcode adds each xcframework's slice Headers dir to the header search path,
+      # so the bridging header's #import "sherpa-onnx/c-api/c-api.h" resolves.
+      - framework: Vendor/sherpa-onnx.xcframework
+        embed: false
+        link: true
+      - framework: Vendor/onnxruntime.xcframework
+        embed: false
+        link: true
     preBuildScripts:
       - name: "Build + embed the Earshot KMP framework"
         basedOnDependencyAnalysis: false

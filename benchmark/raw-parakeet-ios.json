@@ -1,0 +1,137 @@
+{
+  "clips" : [
+    {
+      "hypothesis" : "mister Quilter is the apostle of the middle classes, and we are glad to welcome his gospel.",
+      "id" : "1272-128104-0000",
+      "processingMs" : 459
+    },
+    {
+      "hypothesis" : "Nor is mister Quilter's manner less interesting than his matter.",
+      "id" : "1272-128104-0001",
+      "processingMs" : 215
+    },
+    {
+      "hypothesis" : "He tells us that at this festive season of the year, with Christmas and roast beef looming before us, similes drawn from eating and its results occur most readily to the mind.",
+      "id" : "1272-128104-0002",
+      "processingMs" : 556
+    },
+    {
+      "hypothesis" : "He has grave doubts whether Sir Frederick Leighton's work is really Greek, after all, and can discover in it but little of Rocky Ithaca.",
+      "id" : "1272-128104-0003",
+      "processingMs" : 445
+    },
+    {
+      "hypothesis" : "Linnell's pictures are a sort of Up Guards and Adam paintings, and Mason's exquisite idols are as national as a jingo poem. mister Burkett Foster's landscapes smile at one much in the same way that mister Carker used to flash his teeth. And mister John Collier gives his sitter a cheerful slap on the back, before he says, like a champeoer in a Turkish bath Next man.",
+      "id" : "1272-128104-0004",
+      "processingMs" : 1537
+    },
+    {
+      "hypothesis" : "It is obviously unnecessary for us to point out how luminous these criticisms are, how delicate in expression.",
+      "id" : "1272-128104-0005",
+      "processingMs" : 470
+    },
+    {
+      "hypothesis" : "On the general principles of art, mister Quilter writes with equal lucidity.",
+      "id" : "1272-128104-0006",
+      "processingMs" : 310
+    },
+    {
+      "hypothesis" : "Painting, he tells us, is of a different quality to mathematics, and finish in art is adding more fact.",
+      "id" : "1272-128104-0007",
+      "processingMs" : 495
+    },
+    {
+      "hypothesis" : "As for etchings, they are of two kinds, British and foreign.",
+      "id" : "1272-128104-0008",
+      "processingMs" : 263
+    },
+    {
+      "hypothesis" : "He laments most bitterly the divorce that has been made between decorative art and what we usually call pictures, makes a customary appeal to the last judgment and reminds us that in the great days of art Michelangelo was the furnishing upholsterer.",
+      "id" : "1272-128104-0009",
+      "processingMs" : 963
+    },
+    {
+      "hypothesis" : "near the fire, and the ornaments Fred brought home from India on the mantle board.",
+      "id" : "1272-128104-0010",
+      "processingMs" : 295
+    },
+    {
+      "hypothesis" : "In fact, he is quite severe on mister Ruskin for not recognizing that a picture should denote the frailty of man, and remarks with pleasing courtesy and felicita's grace that many phases of feeling",
+      "id" : "1272-128104-0011",
+      "processingMs" : 787
+    },
+    {
+      "hypothesis" : "Only, unfortunately, his own work never does get good.",
+      "id" : "1272-128104-0012",
+      "processingMs" : 285
+    },
+    {
+      "hypothesis" : "mister Quilter has missed his chance, for he has failed even to make himself the Tupper of Painting.",
+      "id" : "1272-128104-0013",
+      "processingMs" : 370
+    },
+    {
+      "hypothesis" : "by Harry Quilter, M. A.",
+      "id" : "1272-128104-0014",
+      "processingMs" : 146
+    },
+    {
+      "hypothesis" : "Because you are sleeping instead of conquering, the lovely rose princess has become a fiddle without a bow, while poor Shaggy sits there a cooing dove.",
+      "id" : "1272-135031-0000",
+      "processingMs" : 579
+    },
+    {
+      "hypothesis" : "He has gone, and gone for good, answered Polychrome, who had managed to squeeze into the room beside the dragon, and had witnessed the occurrences with much interest.",
+      "id" : "1272-135031-0001",
+      "processingMs" : 598
+    },
+    {
+      "hypothesis" : "I have remained a prisoner only because I wished to be one. And with this he stepped forward and burst the stout chains as easily as if they had been threads.",
+      "id" : "1272-135031-0002",
+      "processingMs" : 598
+    },
+    {
+      "hypothesis" : "The little girl had been asleep, but she heard the raps and opened the door.",
+      "id" : "1272-135031-0003",
+      "processingMs" : 265
+    },
+    {
+      "hypothesis" : "The king has fled to disgrace, and your friends are asking for you.",
+      "id" : "1272-135031-0004",
+      "processingMs" : 244
+    },
+    {
+      "hypothesis" : "I begged Rugado long ago to send him away, but he would not do so.",
+      "id" : "1272-135031-0005",
+      "processingMs" : 260
+    },
+    {
+      "hypothesis" : "I also offered to help your brother to escape, but he would not go.",
+      "id" : "1272-135031-0006",
+      "processingMs" : 232
+    },
+    {
+      "hypothesis" : "He eats and sleeps very steadily, replied the new king.",
+      "id" : "1272-135031-0007",
+      "processingMs" : 230
+    },
+    {
+      "hypothesis" : "I hope he doesn't work too hard, said Shaggy.",
+      "id" : "1272-135031-0008",
+      "processingMs" : 210
+    },
+    {
+      "hypothesis" : "He doesn't work at all.",
+      "id" : "1272-135031-0009",
+      "processingMs" : 125
+    }
+  ],
+  "device" : "iPad",
+  "loadMs" : 5016,
+  "model" : "parakeet-tdt-0.6b-v3 (int8)",
+  "osVersion" : "iOS 26.5",
+  "peakMemoryBytes" : 907266384,
+  "platform" : "iOS",
+  "provenance" : "real-device",
+  "runtime" : "sherpa-onnx"
+}

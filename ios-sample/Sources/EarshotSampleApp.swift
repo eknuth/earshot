@@ -19,6 +19,12 @@ struct EarshotSampleApp: App {
             Task { await AppleSpeechBench.run() }
             return
         }
+        // Benchmark mode for NVIDIA Parakeet-TDT via sherpa-onnx, the same model that runs on
+        // Android, for a cross-runtime comparison against Whisper on the same device and clips.
+        if CommandLine.arguments.contains("--earshot-bench-parakeet") {
+            Task { await ParakeetBenchRunner.run() }
+            return
+        }
         // Register the Swift WhisperKit backend with the shared seam, once, at launch.
         NativeTranscriptionProviderHolder.shared.implementation = WhisperKitTranscriptionProvider()
     }

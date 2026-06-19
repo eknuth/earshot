@@ -15,11 +15,31 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            // Real-device benchmark target (Pixel 9a). sherpa-onnx prebuilt .so are per-ABI;
+            // limit to arm64-v8a so the APK only carries what the test device needs.
+            abiFilters += "arm64-v8a"
+        }
     }
 
     buildFeatures {
         compose = true
     }
+
+    packaging {
+        jniLibs {
+            // Both the Whisper path (Microsoft onnxruntime-android, pulled in transitively via
+            // :earshot) and the sherpa-onnx Parakeet path ship a libonnxruntime.so. Two copies
+            // can't coexist under one ABI, so keep the first. Both are official ONNX Runtime
+            // builds; the benchmark runs one model family per APK.
+            pickFirsts += "**/libonnxruntime.so"
+        }
+    }
+
+    // sherpa-onnx native libraries (libsherpa-onnx-jni.so, libonnxruntime.so) for arm64-v8a are
+    // NOT vendored in git. Download them from a sherpa-onnx Android release and drop them in
+    // src/main/jniLibs/arm64-v8a/ before running the Parakeet benchmark. See README.
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
