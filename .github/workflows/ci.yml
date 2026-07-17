@@ -37,7 +37,7 @@ jobs:
         run: ./gradlew :earshot:assemble :earshot:testDebugUnitTest :sample-android:assembleDebug --stacktrace
 
       - name: Upload sample APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sample-android-debug
           path: sample-android/build/outputs/apk/debug/*.apk
