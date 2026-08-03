@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: gradle/actions/wrapper-validation@v4
+      - uses: gradle/actions/wrapper-validation@v6.2.0
 
   android:
     name: Android build
@@ -31,7 +31,7 @@ jobs:
           java-version: "17"
 
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6.2.0
 
       - name: Build library and sample, run unit tests
         run: ./gradlew :earshot:assemble :earshot:testDebugUnitTest :sample-android:assembleDebug --stacktrace
@@ -57,7 +57,7 @@ jobs:
           java-version: "17"
 
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6.2.0
 
       - name: Build Kotlin iOS framework
         run: ./gradlew :earshot:linkDebugFrameworkIosSimulatorArm64 --stacktrace
